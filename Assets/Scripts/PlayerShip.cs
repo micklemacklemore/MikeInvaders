@@ -26,4 +26,15 @@ public class PlayerShip : MonoBehaviour
             GetComponent<Rigidbody>().AddRelativeForce(-forceVector); 
         }
     }
+
+    void Update()
+    {
+        if (Input.GetButtonDown("Fire1"))
+        {
+            Debug.Log("Fire!"); 
+            Vector3 spawnPos = gameObject.transform.position; 
+            GameObject obj = Instantiate(bullet, spawnPos, Quaternion.identity); 
+            Physics.IgnoreCollision(obj.GetComponent<Collider>(), GetComponent<Collider>());
+        } 
+    }
 }

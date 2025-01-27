@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using UnityEngine;
 
 public class AlienShip : MonoBehaviour
@@ -7,7 +8,10 @@ public class AlienShip : MonoBehaviour
     public float speed = 1.0f;
     public float targetDistance = 8.0f;  
 
-    public AlienShipManager manager = null; 
+    public AlienShipManager manager = null;
+
+    public int rowIndex = 0; 
+    public int columnIndex = 0; 
 
     private float direction = 1.0f; // right
     private Vector3 directionVector; 
@@ -55,13 +59,21 @@ public class AlienShip : MonoBehaviour
         directionVector = Vector3.zero; 
     }
 
+    public void Die()
+    {
+        Destroy(gameObject); 
+        if (manager != null)
+        {
+            manager.NotifyShipDestroyed(rowIndex, columnIndex);
+        }
+    }
+
     void OnCollisionEnter(Collision collision)
     {
         Collider collider = collision.collider; 
 
         if (collider.CompareTag("Wall"))
         {
-            Debug.Log("Hit Wall"); 
             if (manager is not null)
             {
                 manager.AdvanceShips(); 

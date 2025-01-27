@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class AlienShipManager : MonoBehaviour
@@ -21,7 +22,8 @@ public class AlienShipManager : MonoBehaviour
     public float shipSpeed = 1.0f; 
     public float approachDistance = 5.0f; 
 
-    private List<GameObject> spawnedObjects = new List<GameObject>(); 
+    private AlienShip[,] gridShips; 
+    private bool clean = false; 
 
     void OnDrawGizmos()
     {
@@ -33,16 +35,27 @@ public class AlienShipManager : MonoBehaviour
 
     private void Start()
     {
+        gridShips = new AlienShip[numberOfRows, numberOfColumns]; 
         SpawnGrid();
+    }
+
+    private void Update()
+    {
+    }
+
+    public void NotifyShipDestroyed(int row, int column)
+    {
+        gridShips[row, column] = null; 
     }
 
     public void AdvanceShips()
     {
-        Debug.Log("AdvanceShip"); 
-        foreach (GameObject obj in spawnedObjects)
+        foreach (AlienShip ship in gridShips)
         {
-            AlienShip ship = obj.GetComponent<AlienShip>(); 
-            ship.ChangeDirection(); 
+            if (ship is not null)
+            {
+                ship.ChangeDirection(); 
+            }
         }
     }
 
@@ -83,7 +96,12 @@ public class AlienShipManager : MonoBehaviour
                 clonePrefab.manager = this; 
                 clonePrefab.speed = shipSpeed; 
                 clonePrefab.targetDistance = approachDistance; 
-                spawnedObjects.Add(clone); 
+
+                clonePrefab.rowIndex = row; 
+                clonePrefab.columnIndex = col; 
+
+                // add alien ship to grid
+                gridShips[row, col] = clonePrefab; 
             }
         }
     }

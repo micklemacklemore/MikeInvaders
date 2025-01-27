@@ -23,7 +23,6 @@ public class AlienShipManager : MonoBehaviour
     public float approachDistance = 5.0f; 
 
     private AlienShip[,] gridShips; 
-    private bool clean = false; 
 
     void OnDrawGizmos()
     {
@@ -41,11 +40,46 @@ public class AlienShipManager : MonoBehaviour
 
     private void Update()
     {
+        DebugGetBottomRow(); 
+    }
+
+    private void DebugGetBottomRow()
+    {
+        var list = GetBottomRow(); 
+        foreach (AlienShip ship in list)
+        {
+            var render = ship.GetComponent<Renderer>(); 
+            render.material.SetColor("_Color", Color.red);
+        }
     }
 
     public void NotifyShipDestroyed(int row, int column)
     {
         gridShips[row, column] = null; 
+    }
+
+    public List<AlienShip> GetBottomRow()
+    {
+        List<AlienShip> lastRow = new List<AlienShip>(); 
+        for (int col = numberOfColumns - 1; col >= 0; col--)
+        {
+            AlienShip lastShip = null;  
+            for (int row = numberOfRows - 1; row >= 0; row--)
+            {
+                AlienShip ship = gridShips[row, col];
+                if (ship is not null)
+                {
+                    lastShip = ship; 
+                }
+            }
+
+            if (lastShip is not null)
+            {
+                lastRow.Add(lastShip); 
+            }
+        }
+
+        return lastRow; 
     }
 
     public void AdvanceShips()

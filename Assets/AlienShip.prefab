@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 3699371352835208577}
   - component: {fileID: 138081183662763369}
   - component: {fileID: 6612607955849926306}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: AlienShip
   m_TagString: Alien
   m_Icon: {fileID: 0}
@@ -152,3 +152,5 @@ MonoBehaviour:
   rowIndex: 0
   columnIndex: 0
   bullet: {fileID: 7681592222617443181, guid: ff2f53541b1559344b55a79ea2b28107, type: 3}
+  score: 10
+  ufo: 0

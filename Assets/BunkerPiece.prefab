@@ -44,7 +44,7 @@ GameObject:
   - component: {fileID: 1771839976890653525}
   - component: {fileID: 6697756990814109488}
   - component: {fileID: 1971821059239779587}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube
   m_TagString: BunkerPiece
   m_Icon: {fileID: 0}

@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 14396069189506980}
   m_Layer: 0
   m_Name: PlayerShip
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -147,4 +147,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bullet: {fileID: 7681592222617443181, guid: ff2f53541b1559344b55a79ea2b28107, type: 3}
+  manager: {fileID: 0}
   speed: 10
+  bulletSpeed: 1200
+  blinkDuration: 2
+  blinkInterval: 0.07

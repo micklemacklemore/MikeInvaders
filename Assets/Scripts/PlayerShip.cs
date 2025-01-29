@@ -5,15 +5,21 @@ using UnityEngine;
 public class PlayerShip : MonoBehaviour
 {
     [SerializeField] private GameObject bullet; 
+    [SerializeField] private AlienShipManager manager; 
     [SerializeField] private float speed = 3.0f; 
     [SerializeField] private float bulletSpeed = 1200.0f; 
+
+    public AlienShipManager Manager {set => manager = value; get => manager; }
+
     private Vector3 forceVector; 
     private GameObject activeBullet;
+
+    private MeshRenderer meshRenderer; 
 
     // Start is called before the first frame update
     void Start()
     {
-        forceVector.x = speed; 
+        forceVector.x = speed;  
     }
 
     // Update is called once per frame
@@ -29,6 +35,35 @@ public class PlayerShip : MonoBehaviour
         }
     }
 
+    public void Die()
+    {
+        manager.NotifyPlayerDestroyed(); 
+        Destroy(gameObject); 
+    }
+
+    public void StartBlinking()
+    {
+        StartCoroutine(BlinkCoroutine());
+    }
+
+    public float blinkDuration = 2f; // How long the object will blink
+    public float blinkInterval = 0.1f; // Speed of blinking
+
+    private IEnumerator BlinkCoroutine()
+    {
+        meshRenderer = GetComponent<MeshRenderer>();
+        float elapsedTime = 0f;
+
+        while (elapsedTime < blinkDuration)
+        {
+            meshRenderer.enabled = !meshRenderer.enabled; // Toggle visibility
+            yield return new WaitForSeconds(blinkInterval);
+            elapsedTime += blinkInterval;
+        }
+
+        meshRenderer.enabled = true; // Ensure object is visible after blinking
+    }
+
     void Update()
     {
         // Check if bullet has been destroyed before allowing another fire
@@ -38,6 +73,11 @@ public class PlayerShip : MonoBehaviour
             activeBullet = Instantiate(bullet, spawnPos, Quaternion.identity);
             activeBullet.GetComponent<Bullet>().Thrust = new Vector3(0, 0, bulletSpeed);
             Physics.IgnoreCollision(activeBullet.GetComponent<Collider>(), GetComponent<Collider>());
+        }
+
+        if (Input.GetButtonDown("Fire2"))
+        {
+            manager.KillAll(); 
         }
     }
 }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Bullet : MonoBehaviour
@@ -34,9 +35,10 @@ public class Bullet : MonoBehaviour
             collider.gameObject.GetComponent<MeshRenderer>().enabled = false; 
             collider.gameObject.GetComponent<BoxCollider>().enabled = false; 
         }
-        else
+        else if (collider.CompareTag("Player"))
         {
-            Debug.Log(collider.tag); 
+            PlayerShip ship = collider.gameObject.GetComponent<PlayerShip>();
+            ship.Die();  
         }
 
         Destroy(gameObject); 

@@ -2,15 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
-using TMPro; 
+using TMPro;
+using UnityEngine.SocialPlatforms.Impl;
 
 public class AlienShipManager : MonoBehaviour
 {
     [Header("Prefab to Spawn")]
-    public GameObject prefab;
+    public GameObject alienShipPrefab;
+    public GameObject playerShipPrefab; 
+    public GameObject ufoPrefab; 
+    public GameObject ufoSpawner; 
 
     [Header("UI Prefab")]
     public TMP_Text textScore; 
+    public TMP_Text textLives; 
+    public TMP_Text textYouWin; 
 
     [Header("Grid Settings")]
     public int numberOfRows = 5;
@@ -26,16 +32,30 @@ public class AlienShipManager : MonoBehaviour
     public float shipSpeed = 1.0f; 
     public float approachDistance = 5.0f; 
     public float shootFrequency = 5f; // The target time for the timer
+    public float UFOFrequency = 10f; 
     public float shootSpeed = 1200f;
+
+    [SerializeField] Camera camera2D; 
+    [SerializeField] Camera camera3D; 
+
+    private Camera activeCamera;
 
     private AlienShip[,] gridShips; 
     private List<AlienShip> bottomRow; 
 
+    private PlayerShip player; 
+
     private AudioSource audioSource; 
 
     private float timer = 0f; // The time elapsed
+    private float ufoTimer = 0f; 
 
-    private int totalScore = 0; 
+    private int totalScore; 
+    private int lives = 3; 
+
+    private int shipsLeft; 
+
+    private bool gameRunning; 
 
     void OnDrawGizmos()
     {
@@ -49,25 +69,147 @@ public class AlienShipManager : MonoBehaviour
     {
         gridShips = new AlienShip[numberOfRows, numberOfColumns]; 
         audioSource = GetComponent<AudioSource>(); 
+
+        GameManager.EnsureInstance(); 
+        totalScore = GameManager.Instance.Score; 
+
         textScore.text = "Score: " + totalScore; 
+        textLives.text = "Lives: " + lives; 
+        SpawnPlayer(); 
         SpawnGrid();
         bottomRow = GetBottomRow(); 
+
+        // Set the initial active camera
+        activeCamera = camera2D;
+        camera2D.gameObject.SetActive(true);
+        camera3D.gameObject.SetActive(false);
+
+        gameRunning = true; 
+    }
+
+    public void KillAll()
+    {
+        foreach (AlienShip ship in gridShips)
+        {
+            if (ship is not null)
+            {
+                ship.Die(false);
+                shipsLeft = 0;  
+            }
+        }
+    }
+
+    void SwitchCamera()
+    {
+        if (activeCamera == camera2D)
+        {
+            camera2D.gameObject.SetActive(false);
+            camera3D.gameObject.SetActive(true);
+            activeCamera = camera3D;
+        }
+        else
+        {
+            camera3D.gameObject.SetActive(false);
+            camera2D.gameObject.SetActive(true);
+            activeCamera = camera2D;
+        }
     }
 
     private void Update()
     { 
-        timer += Time.deltaTime; 
-        if (timer >= shootFrequency)
+        if (Input.GetKeyDown(KeyCode.C)) // Press 'C' to switch
         {
-            DebugGetBottomRow(Color.white);
-            int idx = Random.Range(0, bottomRow.Count); 
-            AlienShip ship = bottomRow[idx]; 
-
-            ship.GetComponent<Renderer>().material.SetColor("_Color", Color.red); 
-            ship.Shoot(shootSpeed); 
-
-            timer = 0f; 
+            SwitchCamera();
         }
+
+        if (gameRunning)
+        {
+            timer += Time.deltaTime; 
+            ufoTimer += Time.deltaTime; 
+
+            if (timer >= shootFrequency)
+            {
+                DebugGetBottomRow(Color.white);
+                int idx = Random.Range(0, bottomRow.Count); 
+                AlienShip ship = GetClosestShipToPlayer(player.gameObject.transform.position.x); 
+
+                ship.GetComponent<Renderer>().material.SetColor("_Color", Color.red); 
+                ship.Shoot(shootSpeed); 
+
+                timer = 0; 
+            }
+
+            if (ufoTimer >= UFOFrequency)
+            {
+                SpawnUFO(); 
+
+                ufoTimer = 0; 
+            }
+
+            if (lives == 0)
+            {
+                TriggerGameOver(); 
+            } 
+            else if (shipsLeft == 0)
+            {
+                TriggerWin(); 
+            }
+        }
+        
+    }
+
+    private void SpawnUFO()
+    {
+        GameObject clone = Instantiate(ufoPrefab, ufoSpawner.transform.position, Quaternion.AngleAxis(90, new Vector3(0, 0, 1f)));
+        AlienShip ship = clone.GetComponent<AlienShip>(); 
+        ship.score = 300; 
+        ship.ufo = true; 
+        ship.manager = this; 
+    }
+
+    private void TriggerGameOver()
+    {
+        Debug.Log("Game Over"); 
+        Destroy(player); 
+        foreach (AlienShip alien in gridShips)
+        {
+            if (alien != null)
+            {
+                alien.Die(false); 
+            }
+        }
+
+        gameRunning = false; 
+        GameManager.Instance.Score = totalScore; 
+        GameManager.Instance.LoadGameOver(); 
+    }
+
+    private void TriggerWin()
+    {
+        Debug.Log("Player Wins");
+        textYouWin.text = "You Win!";
+        gameRunning = false; 
+
+        GameManager.Instance.Score = totalScore; 
+        GameManager.Instance.LoadNextWave(); 
+    }
+
+    private AlienShip GetClosestShipToPlayer(float playerX)
+    {
+        AlienShip closestShip = null;
+        float closestDistance = Mathf.Infinity;
+
+        foreach (AlienShip ship in bottomRow)
+        {
+            float distance = Mathf.Abs(ship.transform.position.x - playerX);
+            if (distance < closestDistance)
+            {
+                closestDistance = distance;
+                closestShip = ship;
+            }
+        }
+
+        return closestShip;
     }
 
     private void DebugGetBottomRow(Color color)
@@ -79,13 +221,49 @@ public class AlienShipManager : MonoBehaviour
         }
     }
 
-    public void NotifyShipDestroyed(int row, int column, int score)
+    public void NotifyShipDestroyed(int row, int column, int score, bool ufo)
     {
         audioSource.Play(); 
-        gridShips[row, column] = null; 
-        bottomRow = GetBottomRow(); 
+        if (!ufo)
+        {
+            gridShips[row, column] = null; 
+            bottomRow = GetBottomRow(); 
+            IncreaseShipSpeed(); 
+            shipsLeft--; 
+        }
         totalScore += score; 
         textScore.text = "Score: " + totalScore; 
+    }
+
+    public void IncreaseShipSpeed()
+    {
+        shipSpeed += 0.075f; 
+        foreach (AlienShip ship in gridShips)
+        {
+            if (ship is not null)
+            {
+                ship.speed = shipSpeed; 
+            }
+        }
+    }
+
+    public void NotifyPlayerDestroyed()
+    {
+        lives--; 
+        textLives.text = "Lives: " + lives; 
+
+        SpawnPlayer(); 
+
+        player.StartBlinking(); 
+    }
+
+    public void SpawnPlayer()
+    {
+        // spawn new player
+        GameObject clone = Instantiate(playerShipPrefab, Vector3.zero, Quaternion.identity);
+        PlayerShip clonePrefab = clone.GetComponent<PlayerShip>(); 
+        clonePrefab.Manager = this; 
+        player = clonePrefab; 
     }
 
     public List<AlienShip> GetBottomRow()
@@ -125,7 +303,7 @@ public class AlienShipManager : MonoBehaviour
 
     private void SpawnGrid()
     {
-        if (prefab == null)
+        if (alienShipPrefab == null)
         {
             Debug.LogWarning("No prefab assigned to GridSpawner on " + gameObject.name);
             return;
@@ -153,7 +331,7 @@ public class AlienShipManager : MonoBehaviour
                 Vector3 spawnPos = new Vector3(xPos, 0f, zPos) + transform.position;
 
                 // Create the prefab instance
-                GameObject clone = Instantiate(prefab, spawnPos, Quaternion.identity);
+                GameObject clone = Instantiate(alienShipPrefab, spawnPos, Quaternion.identity);
                 // (Optional) parent the spawned object to keep scene hierarchy organized
                 clone.transform.SetParent(transform);
                 AlienShip clonePrefab = clone.GetComponent<AlienShip>(); 
@@ -168,5 +346,7 @@ public class AlienShipManager : MonoBehaviour
                 gridShips[row, col] = clonePrefab; 
             }
         }
+
+        shipsLeft = numberOfRows * numberOfColumns; 
     }
 }

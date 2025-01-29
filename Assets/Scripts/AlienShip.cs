@@ -22,6 +22,7 @@ public class AlienShip : MonoBehaviour
     private Vector3 targetVector; 
     private bool changeDirection = false; 
     private Rigidbody rb; 
+    public bool ufo = false; 
 
     // Start is called before the first frame update
     void Start()
@@ -72,12 +73,12 @@ public class AlienShip : MonoBehaviour
         directionVector = Vector3.zero; 
     }
 
-    public void Die()
+    public void Die(bool notify = true)
     {
         Destroy(gameObject); 
-        if (manager != null)
+        if (manager != null && notify)
         {
-            manager.NotifyShipDestroyed(rowIndex, columnIndex, score);
+            manager.NotifyShipDestroyed(rowIndex, columnIndex, score, ufo);
         }
     }
 
@@ -91,6 +92,9 @@ public class AlienShip : MonoBehaviour
             {
                 manager.AdvanceShips(); 
             }
+        } else if (collider.CompareTag("UFOWall"))
+        {
+            Die(false); 
         }
     }
 }

@@ -122,6 +122,11 @@ public class AlienShipManager : MonoBehaviour
             SwitchCamera();
         }
 
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit(); 
+        }
+
         if (gameRunning)
         {
             timer += Time.deltaTime; 

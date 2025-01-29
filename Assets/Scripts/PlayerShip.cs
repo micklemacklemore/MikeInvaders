@@ -20,6 +20,7 @@ public class PlayerShip : MonoBehaviour
     void Start()
     {
         forceVector.x = speed;  
+        GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotation | RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezePositionY;
     }
 
     // Update is called once per frame

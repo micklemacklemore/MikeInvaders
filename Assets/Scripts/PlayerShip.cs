@@ -6,7 +6,9 @@ public class PlayerShip : MonoBehaviour
 {
     [SerializeField] private GameObject bullet; 
     [SerializeField] private float speed = 3.0f; 
+    [SerializeField] private float bulletSpeed = 1200.0f; 
     private Vector3 forceVector; 
+    private GameObject activeBullet;
 
     // Start is called before the first frame update
     void Start()
@@ -29,12 +31,13 @@ public class PlayerShip : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetButtonDown("Fire1"))
+        // Check if bullet has been destroyed before allowing another fire
+        if (Input.GetButtonDown("Fire1") && activeBullet == null)
         {
-            Debug.Log("Fire!"); 
-            Vector3 spawnPos = gameObject.transform.position; 
-            GameObject obj = Instantiate(bullet, spawnPos, Quaternion.identity); 
-            Physics.IgnoreCollision(obj.GetComponent<Collider>(), GetComponent<Collider>());
-        } 
+            Vector3 spawnPos = gameObject.transform.position;
+            activeBullet = Instantiate(bullet, spawnPos, Quaternion.identity);
+            activeBullet.GetComponent<Bullet>().Thrust = new Vector3(0, 0, bulletSpeed);
+            Physics.IgnoreCollision(activeBullet.GetComponent<Collider>(), GetComponent<Collider>());
+        }
     }
 }

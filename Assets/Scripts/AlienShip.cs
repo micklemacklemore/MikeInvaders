@@ -13,11 +13,14 @@ public class AlienShip : MonoBehaviour
     public int rowIndex = 0; 
     public int columnIndex = 0; 
 
+    public GameObject bullet; 
+
     private float direction = 1.0f; // right
     private Vector3 directionVector; 
     private Vector3 targetVector; 
     private bool changeDirection = false; 
     private Rigidbody rb; 
+
     // Start is called before the first frame update
     void Start()
     {
@@ -44,6 +47,14 @@ public class AlienShip : MonoBehaviour
         
     }
 
+
+    public void Shoot(float bulletSpeed)
+    {
+        Vector3 spawnPos = gameObject.transform.position;
+        var activeBullet = Instantiate(bullet, spawnPos, Quaternion.identity);
+        activeBullet.GetComponent<Bullet>().Thrust = new Vector3(0, 0, -bulletSpeed);
+        Physics.IgnoreCollision(activeBullet.GetComponent<Collider>(), GetComponent<Collider>());
+    }
 
     public void ChangeDirection()
     {

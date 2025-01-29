@@ -21,8 +21,15 @@ public class AlienShipManager : MonoBehaviour
     [Header("Ship Global Settings")]
     public float shipSpeed = 1.0f; 
     public float approachDistance = 5.0f; 
+    public float shootFrequency = 5f; // The target time for the timer
+    public float shootSpeed = 1200f;
 
     private AlienShip[,] gridShips; 
+    private List<AlienShip> bottomRow; 
+
+    private AudioSource audioSource; 
+
+    private float timer = 0f; // The time elapsed
 
     void OnDrawGizmos()
     {
@@ -35,27 +42,41 @@ public class AlienShipManager : MonoBehaviour
     private void Start()
     {
         gridShips = new AlienShip[numberOfRows, numberOfColumns]; 
+        audioSource = GetComponent<AudioSource>(); 
         SpawnGrid();
+        bottomRow = GetBottomRow(); 
     }
 
     private void Update()
-    {
-        DebugGetBottomRow(); 
+    { 
+        timer += Time.deltaTime; 
+        if (timer >= shootFrequency)
+        {
+            DebugGetBottomRow(Color.white);
+            int idx = Random.Range(0, bottomRow.Count); 
+            AlienShip ship = bottomRow[idx]; 
+
+            ship.GetComponent<Renderer>().material.SetColor("_Color", Color.red); 
+            ship.Shoot(shootSpeed); 
+
+            timer = 0f; 
+        }
     }
 
-    private void DebugGetBottomRow()
+    private void DebugGetBottomRow(Color color)
     {
-        var list = GetBottomRow(); 
-        foreach (AlienShip ship in list)
+        foreach (AlienShip ship in bottomRow)
         {
             var render = ship.GetComponent<Renderer>(); 
-            render.material.SetColor("_Color", Color.red);
+            render.material.SetColor("_Color", color);
         }
     }
 
     public void NotifyShipDestroyed(int row, int column)
     {
+        audioSource.Play(); 
         gridShips[row, column] = null; 
+        bottomRow = GetBottomRow(); 
     }
 
     public List<AlienShip> GetBottomRow()

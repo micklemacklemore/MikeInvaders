@@ -4,16 +4,15 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    public Vector3 thrust; 
+    private Vector3 _thrust = Vector3.zero; 
+    public Vector3 Thrust { get => _thrust; set => _thrust = value; }
     public Quaternion heading; 
 
     // Start is called before the first frame update
     void Start()
     {
-        thrust.z = 1200.0f; 
         GetComponent<Rigidbody>().drag = 0; 
-        // GetComponent<Rigidbody>().MoveRotation(heading); 
-        GetComponent<Rigidbody>().AddRelativeForce(thrust); 
+        GetComponent<Rigidbody>().AddRelativeForce(Thrust); 
     }
 
     // Update is called once per frame
@@ -33,6 +32,7 @@ public class Bullet : MonoBehaviour
         }
         else{
             Debug.Log("Collided with " + collider.tag); 
+            Destroy(gameObject); 
         }
     }
 }

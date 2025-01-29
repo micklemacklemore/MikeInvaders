@@ -2,11 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using TMPro; 
 
 public class AlienShipManager : MonoBehaviour
 {
     [Header("Prefab to Spawn")]
     public GameObject prefab;
+
+    [Header("UI Prefab")]
+    public TMP_Text textScore; 
 
     [Header("Grid Settings")]
     public int numberOfRows = 5;
@@ -31,6 +35,8 @@ public class AlienShipManager : MonoBehaviour
 
     private float timer = 0f; // The time elapsed
 
+    private int totalScore = 0; 
+
     void OnDrawGizmos()
     {
         Gizmos.color = Color.cyan; 
@@ -43,6 +49,7 @@ public class AlienShipManager : MonoBehaviour
     {
         gridShips = new AlienShip[numberOfRows, numberOfColumns]; 
         audioSource = GetComponent<AudioSource>(); 
+        textScore.text = "Score: " + totalScore; 
         SpawnGrid();
         bottomRow = GetBottomRow(); 
     }
@@ -72,11 +79,13 @@ public class AlienShipManager : MonoBehaviour
         }
     }
 
-    public void NotifyShipDestroyed(int row, int column)
+    public void NotifyShipDestroyed(int row, int column, int score)
     {
         audioSource.Play(); 
         gridShips[row, column] = null; 
         bottomRow = GetBottomRow(); 
+        totalScore += score; 
+        textScore.text = "Score: " + totalScore; 
     }
 
     public List<AlienShip> GetBottomRow()

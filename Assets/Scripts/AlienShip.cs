@@ -15,6 +15,8 @@ public class AlienShip : MonoBehaviour
 
     public GameObject bullet; 
 
+    public int score = 10; 
+
     private float direction = 1.0f; // right
     private Vector3 directionVector; 
     private Vector3 targetVector; 
@@ -75,7 +77,7 @@ public class AlienShip : MonoBehaviour
         Destroy(gameObject); 
         if (manager != null)
         {
-            manager.NotifyShipDestroyed(rowIndex, columnIndex);
+            manager.NotifyShipDestroyed(rowIndex, columnIndex, score);
         }
     }
 

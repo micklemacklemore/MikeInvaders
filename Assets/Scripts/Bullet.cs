@@ -28,11 +28,17 @@ public class Bullet : MonoBehaviour
         {
             AlienShip ship = collider.gameObject.GetComponent<AlienShip>(); 
             ship.Die(); 
-            Destroy(gameObject); 
         }
-        else{
-            Debug.Log("Collided with " + collider.tag); 
-            Destroy(gameObject); 
+        else if (collider.CompareTag("BunkerPiece"))
+        {
+            collider.gameObject.GetComponent<MeshRenderer>().enabled = false; 
+            collider.gameObject.GetComponent<BoxCollider>().enabled = false; 
         }
+        else
+        {
+            Debug.Log(collider.tag); 
+        }
+
+        Destroy(gameObject); 
     }
 }

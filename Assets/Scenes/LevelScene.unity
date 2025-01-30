@@ -2173,6 +2173,18 @@ PrefabInstance:
       propertyPath: alienShipPrefab
       value: 
       objectReference: {fileID: 4546660336637121077, guid: 4d0991061b831754ea1cfe29459f1bc3, type: 3}
+    - target: {fileID: 111030026586583575, guid: 46449fd93653a264080725a0066b740f, type: 3}
+      propertyPath: walls.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 111030026586583575, guid: 46449fd93653a264080725a0066b740f, type: 3}
+      propertyPath: walls.Array.data[0]
+      value: 
+      objectReference: {fileID: 343299356}
+    - target: {fileID: 111030026586583575, guid: 46449fd93653a264080725a0066b740f, type: 3}
+      propertyPath: walls.Array.data[1]
+      value: 
+      objectReference: {fileID: 432358218}
     - target: {fileID: 907308294824602260, guid: 46449fd93653a264080725a0066b740f, type: 3}
       propertyPath: m_Name
       value: Invaders
@@ -2287,8 +2299,8 @@ SceneRoots:
   - {fileID: 1976306948}
   - {fileID: 64658865}
   - {fileID: 343299360}
-  - {fileID: 1270421035}
   - {fileID: 432358222}
+  - {fileID: 1270421035}
   - {fileID: 982013009}
   - {fileID: 546661907174420849}
   - {fileID: 8742448846540331170}

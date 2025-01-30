@@ -37,6 +37,9 @@ public class AlienShip : MonoBehaviour
     private float spriteTimer = 0.0f;  
     private float spriteFrequency = 1.0f; 
 
+    public GameObject[] removeCollisionsOnDie; 
+    private bool dead = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -101,10 +104,24 @@ public class AlienShip : MonoBehaviour
 
     public void Die(bool notify = true)
     {
-        Destroy(gameObject); 
-        if (manager != null && notify)
+        // Destroy(gameObject); 
+        if (!dead)
         {
-            manager.NotifyShipDestroyed(rowIndex, columnIndex, score, ufo);
+            if (manager != null && notify)
+            {
+                manager.NotifyShipDestroyed(rowIndex, columnIndex, score, ufo);
+            }
+
+            rb.useGravity = true; 
+            rb.mass = 0.1f; 
+            animated = false; 
+            _speed = 0f; 
+            foreach (GameObject obj in removeCollisionsOnDie)
+            {
+                Physics.IgnoreCollision(obj.GetComponent<Collider>(), GetComponent<Collider>()); 
+            }
+
+            dead = true; 
         }
     }
 

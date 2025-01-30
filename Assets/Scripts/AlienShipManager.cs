@@ -38,6 +38,8 @@ public class AlienShipManager : MonoBehaviour
     [SerializeField] Camera camera2D; 
     [SerializeField] Camera camera3D; 
 
+    [SerializeField] GameObject[] walls; 
+
     private Camera activeCamera;
 
     private AlienShip[,] gridShips; 
@@ -347,6 +349,13 @@ public class AlienShipManager : MonoBehaviour
 
                 clonePrefab.rowIndex = row; 
                 clonePrefab.columnIndex = col; 
+
+                clonePrefab.removeCollisionsOnDie = new GameObject[walls.Length]; 
+
+                for (int i = 0; i < walls.Length; i++)
+                {
+                    clonePrefab.removeCollisionsOnDie[i] = walls[i]; 
+                }
 
                 // add alien ship to grid
                 gridShips[row, col] = clonePrefab; 

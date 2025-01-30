@@ -1,11 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class AlienShip : MonoBehaviour
 {
-    public float speed = 1.0f;
+    private float _speed = 1.0f; 
+    public float speed { 
+        get => _speed; 
+        set {
+            spriteFrequency = (1f / value); 
+            _speed = value; 
+        } }
     public float targetDistance = 8.0f;  
 
     public AlienShipManager manager = null;
@@ -24,11 +31,21 @@ public class AlienShip : MonoBehaviour
     private Rigidbody rb; 
     public bool ufo = false; 
 
+    public GameObject[] sprites; 
+    private bool spriteSwitch = false; 
+    private bool animated = false;
+    private float spriteTimer = 0.0f;  
+    private float spriteFrequency = 1.0f; 
+
     // Start is called before the first frame update
     void Start()
     {
         directionVector = new Vector3(direction, 0.0f, 0.0f); 
         rb = GetComponent<Rigidbody>(); 
+        if (sprites.Length != 0)
+        {
+            animated = true; 
+        }
         rb.drag = 0; 
     }
 
@@ -47,7 +64,16 @@ public class AlienShip : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        spriteTimer += Time.deltaTime; 
+
+        if (animated && spriteTimer >= spriteFrequency)
+        {
+            sprites[spriteSwitch ? 0 : 1].SetActive(true); 
+            sprites[spriteSwitch ? 1 : 0].SetActive(false); 
+
+            spriteSwitch = !spriteSwitch; 
+            spriteTimer = 0f; 
+        }
     }
 
 

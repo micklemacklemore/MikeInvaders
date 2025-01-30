@@ -202,165 +202,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 41675559}
   m_CullTransparentMesh: 1
---- !u!1 &50931130
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 50931132}
-  - component: {fileID: 50931131}
-  - component: {fileID: 50931133}
-  m_Layer: 0
-  m_Name: Invaders
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &50931131
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 50931130}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6242d21c54c005443ae619db5d4c1df7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  alienShipPrefab: {fileID: 892552585452283255, guid: 6f1ac64b540470d428d66db6912279aa, type: 3}
-  playerShipPrefab: {fileID: 3087879257105953554, guid: 8fbb733f2152e3f47a559b947c09b464, type: 3}
-  ufoPrefab: {fileID: 4500802623507524077, guid: fc1db3b8e028fe346a57e37e9259a3fc, type: 3}
-  ufoSpawner: {fileID: 142220541}
-  textScore: {fileID: 1336085472}
-  textLives: {fileID: 187312640}
-  textYouWin: {fileID: 580495548}
-  numberOfRows: 5
-  numberOfColumns: 11
-  xRange: 26
-  zRange: 12.7
-  shipSpeed: 0.89
-  approachDistance: 0.8
-  shootFrequency: 1.78
-  UFOFrequency: 25
-  shootSpeed: 1200
-  camera2D: {fileID: 963194227}
-  camera3D: {fileID: 1976306947}
---- !u!4 &50931132
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 50931130}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.18, y: 0, z: 23.88}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!82 &50931133
-AudioSource:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 50931130}
-  m_Enabled: 1
-  serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 89d57678da85fe14b996c40717bc53dd, type: 3}
-  m_PlayOnAwake: 0
-  m_Volume: 0.291
-  m_Pitch: 1
-  Loop: 0
-  Mute: 0
-  Spatialize: 0
-  SpatializePostEffects: 0
-  Priority: 128
-  DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 513.06
-  Pan2D: 0
-  rolloffMode: 2
-  BypassEffects: 0
-  BypassListenerEffects: 0
-  BypassReverbZones: 0
-  rolloffCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 0.9834595
-      value: 0.99972534
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  panLevelCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  spreadCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  reverbZoneMixCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
 --- !u!1 &64658863
 GameObject:
   m_ObjectHideFlags: 0
@@ -2159,6 +2000,91 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 41.628, y: 0, z: 0}
+--- !u!1001 &546661907174420849
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 111030026586583575, guid: 46449fd93653a264080725a0066b740f, type: 3}
+      propertyPath: camera2D
+      value: 
+      objectReference: {fileID: 963194227}
+    - target: {fileID: 111030026586583575, guid: 46449fd93653a264080725a0066b740f, type: 3}
+      propertyPath: camera3D
+      value: 
+      objectReference: {fileID: 1976306947}
+    - target: {fileID: 111030026586583575, guid: 46449fd93653a264080725a0066b740f, type: 3}
+      propertyPath: textLives
+      value: 
+      objectReference: {fileID: 187312640}
+    - target: {fileID: 111030026586583575, guid: 46449fd93653a264080725a0066b740f, type: 3}
+      propertyPath: textScore
+      value: 
+      objectReference: {fileID: 1336085472}
+    - target: {fileID: 111030026586583575, guid: 46449fd93653a264080725a0066b740f, type: 3}
+      propertyPath: textYouWin
+      value: 
+      objectReference: {fileID: 580495548}
+    - target: {fileID: 111030026586583575, guid: 46449fd93653a264080725a0066b740f, type: 3}
+      propertyPath: ufoSpawner
+      value: 
+      objectReference: {fileID: 142220541}
+    - target: {fileID: 111030026586583575, guid: 46449fd93653a264080725a0066b740f, type: 3}
+      propertyPath: alienShipPrefab
+      value: 
+      objectReference: {fileID: 4546660336637121077, guid: 4d0991061b831754ea1cfe29459f1bc3, type: 3}
+    - target: {fileID: 907308294824602260, guid: 46449fd93653a264080725a0066b740f, type: 3}
+      propertyPath: m_Name
+      value: Invaders
+      objectReference: {fileID: 0}
+    - target: {fileID: 8140641897336695867, guid: 46449fd93653a264080725a0066b740f, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.18
+      objectReference: {fileID: 0}
+    - target: {fileID: 8140641897336695867, guid: 46449fd93653a264080725a0066b740f, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8140641897336695867, guid: 46449fd93653a264080725a0066b740f, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 23.88
+      objectReference: {fileID: 0}
+    - target: {fileID: 8140641897336695867, guid: 46449fd93653a264080725a0066b740f, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8140641897336695867, guid: 46449fd93653a264080725a0066b740f, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8140641897336695867, guid: 46449fd93653a264080725a0066b740f, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8140641897336695867, guid: 46449fd93653a264080725a0066b740f, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8140641897336695867, guid: 46449fd93653a264080725a0066b740f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8140641897336695867, guid: 46449fd93653a264080725a0066b740f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8140641897336695867, guid: 46449fd93653a264080725a0066b740f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 46449fd93653a264080725a0066b740f, type: 3}
 --- !u!1001 &8742448846540331170
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2227,7 +2153,7 @@ SceneRoots:
   - {fileID: 1270421035}
   - {fileID: 432358222}
   - {fileID: 982013009}
-  - {fileID: 50931132}
+  - {fileID: 546661907174420849}
   - {fileID: 8742448846540331170}
   - {fileID: 1632434226}
   - {fileID: 1868884861}

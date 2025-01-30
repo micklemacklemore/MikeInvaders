@@ -167,6 +167,7 @@ public class AlienShipManager : MonoBehaviour
     {
         GameObject clone = Instantiate(ufoPrefab, ufoSpawner.transform.position, Quaternion.AngleAxis(90, new Vector3(0, 0, 1f)));
         AlienShip ship = clone.GetComponent<AlienShip>(); 
+        ship.speed = 8f;
         ship.score = 300; 
         ship.ufo = true; 
         ship.manager = this; 

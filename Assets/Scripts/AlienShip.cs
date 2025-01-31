@@ -50,6 +50,7 @@ public class AlienShip : MonoBehaviour
             animated = true; 
         }
         rb.drag = 0; 
+        GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionY;
     }
 
     void FixedUpdate()
@@ -128,16 +129,18 @@ public class AlienShip : MonoBehaviour
     void OnCollisionEnter(Collision collision)
     {
         Collider collider = collision.collider; 
-
-        if (collider.CompareTag("Wall"))
-        {
-            if (manager is not null)
-            {
-                manager.AdvanceShips(); 
-            }
-        } else if (collider.CompareTag("UFOWall"))
+        if (collider.CompareTag("UFOWall"))
         {
             Die(false); 
         }
     }
+
+    void OnTriggerEnter(Collider collision)
+    {
+        if (collision.CompareTag("Wall") && manager is not null)
+        {
+            manager.AdvanceShips(); 
+        }
+    }
+
 }

@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 7345760786254551461}
   - component: {fileID: 7355998807112226456}
   - component: {fileID: 1446946455129725556}
-  - component: {fileID: 3699371352835208577}
   - component: {fileID: 138081183662763369}
   - component: {fileID: 6612607955849926306}
+  - component: {fileID: 7901273048760582181}
   m_Layer: 6
   m_Name: AlienShip
   m_TagString: Alien
@@ -86,27 +86,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &3699371352835208577
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 892552585452283255}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &138081183662763369
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -146,7 +125,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5808da79cb806d4287646fd8604c651, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 7.13
   targetDistance: 3.54
   manager: {fileID: 0}
   rowIndex: 0
@@ -154,3 +132,26 @@ MonoBehaviour:
   bullet: {fileID: 7681592222617443181, guid: ff2f53541b1559344b55a79ea2b28107, type: 3}
   score: 10
   ufo: 0
+  sprites: []
+  removeCollisionsOnDie: []
+--- !u!65 &7901273048760582181
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 892552585452283255}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.94, y: 1.03, z: 0.99}
+  m_Center: {x: 0, y: 0, z: 0}

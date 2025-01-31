@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5969017258791777987}
   - component: {fileID: 8052231349741630812}
   - component: {fileID: 7026998847338613605}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -119,7 +119,7 @@ GameObject:
   - component: {fileID: 6695806081687956712}
   - component: {fileID: 4701961780306440101}
   - component: {fileID: 14396069189506980}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: PlayerShip
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -223,8 +223,8 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3087879257105953554}
   serializedVersion: 4
-  m_Mass: 0.05
-  m_Drag: 9
+  m_Mass: 0.1
+  m_Drag: 8.88
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
@@ -256,7 +256,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bullet: {fileID: 7681592222617443181, guid: ff2f53541b1559344b55a79ea2b28107, type: 3}
   manager: {fileID: 0}
-  speed: 10
+  speed: 20.9
   bulletSpeed: 1823
   blinkDuration: 2
   blinkInterval: 0.07
@@ -272,7 +272,7 @@ GameObject:
   - component: {fileID: 4708190554738653902}
   - component: {fileID: 1004595774381387404}
   - component: {fileID: 3832493707188470105}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cube (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -377,7 +377,7 @@ GameObject:
   - component: {fileID: 5168478179042743062}
   - component: {fileID: 6831966317257564789}
   - component: {fileID: 487323300613134808}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cube (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

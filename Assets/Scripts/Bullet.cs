@@ -9,6 +9,9 @@ public class Bullet : MonoBehaviour
     public Vector3 Thrust { get => _thrust; set => _thrust = value; }
     public Quaternion heading; 
 
+    private bool live = true; 
+    public bool isAlive { get => live; }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -24,23 +27,29 @@ public class Bullet : MonoBehaviour
 
     void OnCollisionEnter(Collision collision) 
     {
-        Collider collider = collision.collider; 
-        if (collider.CompareTag("Alien"))
+        if (live)
         {
-            AlienShip ship = collider.gameObject.GetComponent<AlienShip>(); 
-            ship.Die(); 
-        }
-        else if (collider.CompareTag("BunkerPiece"))
-        {
-            collider.gameObject.GetComponent<MeshRenderer>().enabled = false; 
-            collider.gameObject.GetComponent<BoxCollider>().enabled = false; 
-        }
-        else if (collider.CompareTag("Player"))
-        {
-            PlayerShip ship = collider.gameObject.GetComponent<PlayerShip>();
-            ship.Die();  
-        }
+            Collider collider = collision.collider; 
+            if (collider.CompareTag("Alien"))
+            {
+                AlienShip ship = collider.gameObject.GetComponent<AlienShip>(); 
+                ship.Die(); 
+            }
+            else if (collider.CompareTag("BunkerPiece"))
+            {
+                collider.gameObject.GetComponent<MeshRenderer>().enabled = false; 
+                collider.gameObject.GetComponent<BoxCollider>().enabled = false; 
+            }
+            else if (collider.CompareTag("Player"))
+            {
+                PlayerShip ship = collider.gameObject.GetComponent<PlayerShip>();
+                ship.Die();  
+            }
 
-        Destroy(gameObject); 
+            live = false; 
+            GetComponent<Rigidbody>().useGravity = true; 
+            GetComponent<Rigidbody>().mass = 0f; 
+        }
+        // Destroy(gameObject); 
     }
 }

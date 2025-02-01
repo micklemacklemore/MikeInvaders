@@ -134,6 +134,7 @@ MonoBehaviour:
   ufo: 0
   sprites: []
   removeCollisionsOnDie: []
+  replacement: {fileID: 2756567802705077832, guid: fe41960bb0ddde741b4b1bd75369678f, type: 3}
 --- !u!65 &7901273048760582181
 BoxCollider:
   m_ObjectHideFlags: 0

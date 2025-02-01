@@ -95,7 +95,7 @@ public class AlienShipManager : MonoBehaviour
         {
             if (ship is not null)
             {
-                ship.Die(Vector3.zero, false);
+                ship.Die(null, false);
                 shipsLeft = 0;  
             }
         }
@@ -183,7 +183,7 @@ public class AlienShipManager : MonoBehaviour
         {
             if (alien != null)
             {
-                alien.Die(Vector3.zero, false); 
+                alien.Die(null, false); 
             }
         }
 

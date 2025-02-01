@@ -32,7 +32,7 @@ public class AlienShip : MonoBehaviour
     public bool ufo = false; 
 
     public GameObject[] sprites; 
-    private GameObject currentSprite; 
+    private GameObject currentSprite = null; 
     private bool spriteSwitch = false; 
     private bool animated = false;
     private float spriteTimer = 0.0f;  
@@ -40,6 +40,8 @@ public class AlienShip : MonoBehaviour
 
     public GameObject[] removeCollisionsOnDie; 
     private bool dead = false;
+
+    public GameObject replacement;
 
     // Start is called before the first frame update
     void Start()
@@ -106,7 +108,7 @@ public class AlienShip : MonoBehaviour
         directionVector = Vector3.zero; 
     }
 
-    public void Die(Vector3 collisionPos, bool notify = true)
+    public void Die(Collision collision, bool notify = true)
     {
         if (!dead)
         {
@@ -119,6 +121,7 @@ public class AlienShip : MonoBehaviour
             rb.mass = 0.1f;
             animated = false;
             _speed = 0f;
+            // rb.excludeLayers = LayerMask.NameToLayer("BulletLayer"); 
 
             // TODO: Consider using a layer mask instead of manually ignoring collisions.
             foreach (GameObject obj in removeCollisionsOnDie)
@@ -126,19 +129,29 @@ public class AlienShip : MonoBehaviour
                 Physics.IgnoreCollision(obj.GetComponent<Collider>(), GetComponent<Collider>());
             }
 
-            // Find the closest cube to collisionPos
-            GameObject closestCube = FindClosestCube(collisionPos);
-            if (closestCube != null)
+            if (collision is not null && currentSprite is not null)
             {
-                collisionPos = closestCube.transform.position; // Update collision position to closest cube's position
-
-                // Find and color nearby cubes using the new collisionPos
-                foreach (GameObject bit in FindCubesInRadius(collisionPos, 0.5f))
+                // Find the closest cube to collisionPos
+                GameObject closestCube = FindClosestCube(collision.GetContact(0).point);
+                if (closestCube != null)
                 {
-                    var render = bit.GetComponent<Renderer>();
-                    if (render is not null)
+                    var impactPos = closestCube.transform.position; // Update collision position to closest cube's position
+
+                    // Find and color nearby cubes using the new collisionPos
+                    foreach (GameObject bit in FindCubesInRadius(impactPos, 0.5f))
                     {
-                        render.material.SetColor("_Color", Color.red);
+                        GameObject _replacement = Instantiate(replacement);
+                    
+                        // Ensure the replacement has the same world transform properties
+                        _replacement.transform.position = bit.transform.position;  // Preserve world position
+                        _replacement.transform.rotation = bit.transform.rotation;  // Preserve world rotation
+                        _replacement.transform.localScale = bit.transform.lossyScale;  // Preserve world scale
+
+                        // Ensure the replacement behaves correctly
+                        var rb = _replacement.GetComponent<Rigidbody>();
+                        rb.AddExplosionForce(collision.relativeVelocity.magnitude * 100, collision.GetContact(0).point, 2); 
+                        
+                        bit.SetActive(false); // Hide original bit
                     }
                 }
             }

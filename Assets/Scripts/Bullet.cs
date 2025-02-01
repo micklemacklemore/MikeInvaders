@@ -35,7 +35,7 @@ public class Bullet : MonoBehaviour
             if (collider.CompareTag("Alien"))
             {
                 AlienShip ship = collider.gameObject.GetComponent<AlienShip>(); 
-                ship.Die(gameObject.transform.position); 
+                ship.Die(collision); 
             }
             else if (collider.CompareTag("BunkerPiece"))
             {

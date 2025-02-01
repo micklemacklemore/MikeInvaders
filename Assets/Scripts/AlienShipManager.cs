@@ -53,7 +53,7 @@ public class AlienShipManager : MonoBehaviour
     private float ufoTimer = 0f; 
 
     private int totalScore; 
-    private int lives = 3; 
+    private int lives = 3000; 
 
     private int shipsLeft; 
 
@@ -95,7 +95,7 @@ public class AlienShipManager : MonoBehaviour
         {
             if (ship is not null)
             {
-                ship.Die(false);
+                ship.Die(Vector3.zero, false);
                 shipsLeft = 0;  
             }
         }
@@ -183,7 +183,7 @@ public class AlienShipManager : MonoBehaviour
         {
             if (alien != null)
             {
-                alien.Die(false); 
+                alien.Die(Vector3.zero, false); 
             }
         }
 

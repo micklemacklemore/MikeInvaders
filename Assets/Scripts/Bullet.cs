@@ -11,12 +11,14 @@ public class Bullet : MonoBehaviour
 
     private bool live = true; 
     public bool isAlive { get => live; }
+    public bool destroyOnCollision = false; 
 
     // Start is called before the first frame update
     void Start()
     {
         GetComponent<Rigidbody>().drag = 0; 
         GetComponent<Rigidbody>().AddRelativeForce(Thrust); 
+        GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionY;
     }
 
     // Update is called once per frame
@@ -33,7 +35,7 @@ public class Bullet : MonoBehaviour
             if (collider.CompareTag("Alien"))
             {
                 AlienShip ship = collider.gameObject.GetComponent<AlienShip>(); 
-                ship.Die(); 
+                ship.Die(gameObject.transform.position); 
             }
             else if (collider.CompareTag("BunkerPiece"))
             {
@@ -46,9 +48,16 @@ public class Bullet : MonoBehaviour
                 ship.Die();  
             }
 
+            if (destroyOnCollision)
+            {
+                Destroy(gameObject); 
+                return; 
+            }
+
             live = false; 
             GetComponent<Rigidbody>().useGravity = true; 
             GetComponent<Rigidbody>().mass = 0f; 
+            GetComponent<Renderer>().material.SetColor("_Color", Color.grey); 
         }
         // Destroy(gameObject); 
     }

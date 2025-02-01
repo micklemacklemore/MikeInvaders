@@ -74,6 +74,7 @@ public class PlayerShip : MonoBehaviour
             var obj = Instantiate(bullet, spawnPos, Quaternion.identity);
 
             activeBullet = obj.GetComponent<Bullet>(); 
+            activeBullet.destroyOnCollision = true; 
 
             obj.GetComponent<Bullet>().Thrust = new Vector3(0, 0, bulletSpeed);
             Physics.IgnoreCollision(obj.GetComponent<Collider>(), GetComponent<Collider>());

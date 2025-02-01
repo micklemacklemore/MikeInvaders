@@ -32,6 +32,7 @@ public class AlienShip : MonoBehaviour
     public bool ufo = false; 
 
     public GameObject[] sprites; 
+    private GameObject currentSprite; 
     private bool spriteSwitch = false; 
     private bool animated = false;
     private float spriteTimer = 0.0f;  
@@ -75,6 +76,8 @@ public class AlienShip : MonoBehaviour
             sprites[spriteSwitch ? 0 : 1].SetActive(true); 
             sprites[spriteSwitch ? 1 : 0].SetActive(false); 
 
+            currentSprite = sprites[spriteSwitch ? 0 : 1]; 
+
             spriteSwitch = !spriteSwitch; 
             spriteTimer = 0f; 
         }
@@ -103,9 +106,8 @@ public class AlienShip : MonoBehaviour
         directionVector = Vector3.zero; 
     }
 
-    public void Die(bool notify = true)
+    public void Die(Vector3 collisionPos, bool notify = true)
     {
-        // Destroy(gameObject); 
         if (!dead)
         {
             if (manager != null && notify)
@@ -113,17 +115,74 @@ public class AlienShip : MonoBehaviour
                 manager.NotifyShipDestroyed(rowIndex, columnIndex, score, ufo);
             }
 
-            rb.useGravity = true; 
-            rb.mass = 0.1f; 
-            animated = false; 
-            _speed = 0f; 
+            rb.useGravity = true;
+            rb.mass = 0.1f;
+            animated = false;
+            _speed = 0f;
+
+            // TODO: Consider using a layer mask instead of manually ignoring collisions.
             foreach (GameObject obj in removeCollisionsOnDie)
             {
-                Physics.IgnoreCollision(obj.GetComponent<Collider>(), GetComponent<Collider>()); 
+                Physics.IgnoreCollision(obj.GetComponent<Collider>(), GetComponent<Collider>());
             }
 
-            dead = true; 
+            // Find the closest cube to collisionPos
+            GameObject closestCube = FindClosestCube(collisionPos);
+            if (closestCube != null)
+            {
+                collisionPos = closestCube.transform.position; // Update collision position to closest cube's position
+
+                // Find and color nearby cubes using the new collisionPos
+                foreach (GameObject bit in FindCubesInRadius(collisionPos, 0.5f))
+                {
+                    var render = bit.GetComponent<Renderer>();
+                    if (render is not null)
+                    {
+                        render.material.SetColor("_Color", Color.red);
+                    }
+                }
+            }
+
+            dead = true;
         }
+    }
+
+    // Finds the closest cube to the given position
+    GameObject FindClosestCube(Vector3 position)
+    {
+        GameObject closest = null;
+        float minDistance = float.MaxValue;
+
+        foreach (Transform child in currentSprite.transform)
+        {
+            float distance = Vector3.Distance(position, child.position);
+            if (distance < minDistance)
+            {
+                minDistance = distance;
+                closest = child.gameObject;
+            }
+        }
+
+        return closest;
+    }
+
+    // Finds all cubes within a given radius of a position
+    List<GameObject> FindCubesInRadius(Vector3 position, float radius)
+    {
+        List<GameObject> foundCubes = new List<GameObject>();
+
+        foreach (Transform child in currentSprite.transform)
+        {
+            Vector3 cubeCenter = child.position;
+            float cubeSize = child.gameObject.GetComponent<Renderer>().bounds.extents.magnitude;
+
+            if (Vector3.Distance(position, cubeCenter) - cubeSize <= radius)
+            {
+                foundCubes.Add(child.gameObject);
+            }
+        }
+
+        return foundCubes;
     }
 
     void OnCollisionEnter(Collision collision)
@@ -131,7 +190,7 @@ public class AlienShip : MonoBehaviour
         Collider collider = collision.collider; 
         if (collider.CompareTag("UFOWall"))
         {
-            Die(false); 
+            Destroy(gameObject); 
         }
     }
 

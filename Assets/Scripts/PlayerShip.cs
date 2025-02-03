@@ -17,7 +17,7 @@ public class PlayerShip : MonoBehaviour
     private MeshRenderer meshRenderer; 
     private Color originalColor;
 
-    private Rigidbody currentlyAttracted = null; 
+    private AlienShip currentlyAttracted = null; 
 
     // Radius and force for attracting objects
     [SerializeField] private float attractionRadius = 5f;
@@ -52,7 +52,7 @@ public class PlayerShip : MonoBehaviour
         // Check if we're holding the Down arrow in FixedUpdate (for physics)
         if (Input.GetKey(KeyCode.DownArrow) && currentlyAttracted != null)
         {
-            PullObjectTowardPlayer(currentlyAttracted);
+            PullObjectTowardPlayer(currentlyAttracted.GetComponent<Rigidbody>());
         }
     }
 
@@ -103,7 +103,7 @@ public class PlayerShip : MonoBehaviour
             meshRenderer.material.SetColor("_Color", originalColor); 
             if (currentlyAttracted != null)
             {
-                LaunchObjectInZ(currentlyAttracted);
+                LaunchObjectInZ(currentlyAttracted.GetComponent<Rigidbody>());
                 currentlyAttracted = null; // We’re done with it
             }
         }
@@ -130,20 +130,16 @@ public class PlayerShip : MonoBehaviour
     // <summary>
     /// Finds the nearest rigidbody within `attractionRadius`.
     /// </summary>
-    private Rigidbody FindNearestObject()
+    private AlienShip FindNearestObject()
     {
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, attractionRadius);
 
         float minDist = float.MaxValue;
-        Rigidbody nearestBody = null;
+        AlienShip nearestBody = null;
 
         foreach (var collider in hitColliders)
         {
-            if (collider.gameObject.GetComponent<AlienShip>() == null)
-            {
-                continue; 
-            }
-            Rigidbody rb = collider.attachedRigidbody;
+            AlienShip rb = collider.gameObject.GetComponent<AlienShip>();
             if (rb != null && rb.gameObject != gameObject)
             {
                 float dist = Vector3.Distance(transform.position, rb.transform.position);
@@ -179,6 +175,4 @@ public class PlayerShip : MonoBehaviour
         Vector3 launchDir = new Vector3(0, 0, 1); // or transform.forward if you want local ship's forward
         targetBody.AddForce(launchDir * launchForce);
     }
-
-
 }

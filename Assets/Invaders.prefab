@@ -45,7 +45,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6242d21c54c005443ae619db5d4c1df7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  alienShipPrefab: {fileID: 892552585452283255, guid: 6f1ac64b540470d428d66db6912279aa, type: 3}
+  alienShipLowPrefab: {fileID: 4546660336637121077, guid: 4d0991061b831754ea1cfe29459f1bc3, type: 3}
+  alienShipMidPrefab: {fileID: 4546660336637121077, guid: e537022d890fb3047ab94e0ed09eef8a, type: 3}
+  alienShipHighPrefab: {fileID: 4546660336637121077, guid: 4c07a9cc79f580646bfd386770db6134, type: 3}
   playerShipPrefab: {fileID: 3087879257105953554, guid: 8fbb733f2152e3f47a559b947c09b464, type: 3}
   ufoPrefab: {fileID: 4500802623507524077, guid: fc1db3b8e028fe346a57e37e9259a3fc, type: 3}
   ufoSpawner: {fileID: 0}
@@ -60,9 +62,10 @@ MonoBehaviour:
   approachDistance: 0.8
   shootFrequency: 1.78
   UFOFrequency: 25
-  shootSpeed: 1200
+  shootSpeed: 1000
   camera2D: {fileID: 0}
   camera3D: {fileID: 0}
+  walls: []
 --- !u!82 &3760032101362104396
 AudioSource:
   m_ObjectHideFlags: 0
@@ -73,7 +76,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 89d57678da85fe14b996c40717bc53dd, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 6eed70d3c05122440b28d7335fdf1673, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.291
   m_Pitch: 1

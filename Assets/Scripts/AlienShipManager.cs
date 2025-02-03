@@ -8,7 +8,9 @@ using UnityEngine.SocialPlatforms.Impl;
 public class AlienShipManager : MonoBehaviour
 {
     [Header("Prefab to Spawn")]
-    public GameObject alienShipPrefab;
+    public GameObject alienShipLowPrefab;
+    public GameObject alienShipMidPrefab;
+    public GameObject alienShipHighPrefab;
     public GameObject playerShipPrefab; 
     public GameObject ufoPrefab; 
     public GameObject ufoSpawner; 
@@ -53,7 +55,7 @@ public class AlienShipManager : MonoBehaviour
     private float ufoTimer = 0f; 
 
     private int totalScore; 
-    private int lives = 3000; 
+    private int lives = 300; 
 
     private int shipsLeft; 
 
@@ -311,12 +313,6 @@ public class AlienShipManager : MonoBehaviour
 
     private void SpawnGrid()
     {
-        if (alienShipPrefab == null)
-        {
-            Debug.LogWarning("No prefab assigned to GridSpawner on " + gameObject.name);
-            return;
-        }
-
         // We’ll use Lerp from -range/2 to +range/2 for a symmetrical spread
         for (int row = 0; row < numberOfRows; row++)
         {
@@ -339,7 +335,22 @@ public class AlienShipManager : MonoBehaviour
                 Vector3 spawnPos = new Vector3(xPos, 0f, zPos) + transform.position;
 
                 // Create the prefab instance
-                GameObject clone = Instantiate(alienShipPrefab, spawnPos, Quaternion.identity);
+                GameObject toSpawn = null; 
+
+                if (row <= 1)
+                {
+                    toSpawn = alienShipLowPrefab; 
+                }
+                else if (row <= 3)
+                {
+                    toSpawn = alienShipMidPrefab; 
+                }
+                else
+                {
+                    toSpawn = alienShipHighPrefab; 
+                }
+
+                GameObject clone = Instantiate(toSpawn, spawnPos, Quaternion.identity);
                 // (Optional) parent the spawned object to keep scene hierarchy organized
                 clone.transform.SetParent(transform);
                 AlienShip clonePrefab = clone.GetComponent<AlienShip>(); 

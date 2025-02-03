@@ -135,6 +135,7 @@ MonoBehaviour:
   sprites: []
   removeCollisionsOnDie: []
   replacement: {fileID: 2756567802705077832, guid: fe41960bb0ddde741b4b1bd75369678f, type: 3}
+  particles: {fileID: 417987895509034771, guid: b27db9c754887df439b3323fbf6b992f, type: 3}
 --- !u!65 &7901273048760582181
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -154,5 +155,5 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.94, y: 1.03, z: 0.99}
+  m_Size: {x: 0.94, y: 1.06, z: 1.23}
   m_Center: {x: 0, y: 0, z: 0}

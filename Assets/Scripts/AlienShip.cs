@@ -43,6 +43,8 @@ public class AlienShip : MonoBehaviour
 
     public GameObject replacement;
 
+    public GameObject particles = null; 
+
     // Start is called before the first frame update
     void Start()
     {
@@ -51,6 +53,7 @@ public class AlienShip : MonoBehaviour
         if (sprites.Length != 0)
         {
             animated = true; 
+            currentSprite = sprites[0]; 
         }
         rb.drag = 0; 
         GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionY;
@@ -133,9 +136,14 @@ public class AlienShip : MonoBehaviour
             {
                 // Find the closest cube to collisionPos
                 GameObject closestCube = FindClosestCube(collision.GetContact(0).point);
-                if (closestCube != null)
+                if (closestCube is not null)
                 {
                     var impactPos = closestCube.transform.position; // Update collision position to closest cube's position
+
+                    foreach (GameObject bit in FindCubesInRadius(impactPos, 0.7f))
+                    {
+                        bit.GetComponent<Renderer>().material.SetColor("_Color", Color.red); 
+                    }
 
                     // Find and color nearby cubes using the new collisionPos
                     foreach (GameObject bit in FindCubesInRadius(impactPos, 0.5f))
@@ -152,6 +160,19 @@ public class AlienShip : MonoBehaviour
                         rb.AddExplosionForce(collision.relativeVelocity.magnitude * 100, collision.GetContact(0).point, 2); 
                         
                         bit.SetActive(false); // Hide original bit
+                    }
+
+                    if (particles is not null)
+                    {
+                        Instantiate(particles, closestCube.transform.position, Quaternion.identity);
+                        // var instantiatedParticle = Instantiate(particles, closestCube.transform.position, Quaternion.identity);
+                        // var ps = instantiatedParticle.GetComponentInChildren<ParticleSystem>();
+
+                        // var forceModule = ps.forceOverLifetime; 
+
+                        // forceModule.x = collision.impulse.x;
+                        // forceModule.y = collision.impulse.y;
+                        // forceModule.z = collision.impulse.z - 10f;
                     }
                 }
             }

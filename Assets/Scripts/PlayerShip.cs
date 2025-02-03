@@ -15,12 +15,26 @@ public class PlayerShip : MonoBehaviour
     private Bullet activeBullet;
 
     private MeshRenderer meshRenderer; 
+    private Color originalColor;
+
+    private Rigidbody currentlyAttracted = null; 
+
+    // Radius and force for attracting objects
+    [SerializeField] private float attractionRadius = 5f;
+    [SerializeField] private float attractionForce = 10f;
+    [SerializeField] private Vector3 attractionOffset = Vector3.zero; 
+    [SerializeField] private float launchForce = 1f; 
 
     // Start is called before the first frame update
     void Start()
     {
         forceVector.x = speed;  
-        GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotation | RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezePositionY;
+        GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotation | 
+                                                RigidbodyConstraints.FreezePositionZ | 
+                                                RigidbodyConstraints.FreezePositionY;
+        
+        meshRenderer = GetComponent<MeshRenderer>();
+        originalColor = meshRenderer.material.GetColor("_Color"); 
     }
 
     // Update is called once per frame
@@ -34,17 +48,23 @@ public class PlayerShip : MonoBehaviour
         {
             GetComponent<Rigidbody>().AddRelativeForce(-forceVector); 
         }
+
+        // Check if we're holding the Down arrow in FixedUpdate (for physics)
+        if (Input.GetKey(KeyCode.DownArrow) && currentlyAttracted != null)
+        {
+            PullObjectTowardPlayer(currentlyAttracted);
+        }
     }
 
     public void Die()
     {
-        manager.NotifyPlayerDestroyed(); 
-        Destroy(gameObject); 
+        // manager.NotifyPlayerDestroyed(); 
+        // Destroy(gameObject); 
     }
 
     public void StartBlinking()
     {
-        StartCoroutine(BlinkCoroutine());
+        // StartCoroutine(BlinkCoroutine());
     }
 
     public float blinkDuration = 2f; // How long the object will blink
@@ -52,7 +72,6 @@ public class PlayerShip : MonoBehaviour
 
     private IEnumerator BlinkCoroutine()
     {
-        meshRenderer = GetComponent<MeshRenderer>();
         float elapsedTime = 0f;
 
         while (elapsedTime < blinkDuration)
@@ -65,8 +84,30 @@ public class PlayerShip : MonoBehaviour
         meshRenderer.enabled = true; // Ensure object is visible after blinking
     }
 
+    
+
     void Update()
     {
+        if (Input.GetKey(KeyCode.DownArrow))
+        {
+            if (currentlyAttracted == null)
+            {
+                currentlyAttracted = FindNearestObject();
+            }
+            meshRenderer.material.SetColor("_Color", Color.blue);
+        }
+
+        // 2. On key-up, launch it in the +Z direction
+        if (Input.GetKeyUp(KeyCode.DownArrow))
+        {
+            meshRenderer.material.SetColor("_Color", originalColor); 
+            if (currentlyAttracted != null)
+            {
+                LaunchObjectInZ(currentlyAttracted);
+                currentlyAttracted = null; // We’re done with it
+            }
+        }
+
         // Check if bullet has been destroyed before allowing another fire
         if (Input.GetButtonDown("Fire1") && (activeBullet == null || !activeBullet.isAlive) )
         {
@@ -85,4 +126,59 @@ public class PlayerShip : MonoBehaviour
             manager.KillAll(); 
         }
     }
+
+    // <summary>
+    /// Finds the nearest rigidbody within `attractionRadius`.
+    /// </summary>
+    private Rigidbody FindNearestObject()
+    {
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, attractionRadius);
+
+        float minDist = float.MaxValue;
+        Rigidbody nearestBody = null;
+
+        foreach (var collider in hitColliders)
+        {
+            if (collider.gameObject.GetComponent<AlienShip>() == null)
+            {
+                continue; 
+            }
+            Rigidbody rb = collider.attachedRigidbody;
+            if (rb != null && rb.gameObject != gameObject)
+            {
+                float dist = Vector3.Distance(transform.position, rb.transform.position);
+                if (dist < minDist)
+                {
+                    minDist = dist;
+                    nearestBody = rb;
+                }
+            }
+        }
+
+        return nearestBody;
+    }
+
+    /// <summary>
+    /// Pull the object toward the player with a "magnet" force.
+    /// </summary>
+    private void PullObjectTowardPlayer(Rigidbody targetBody)
+    {
+        Vector3 direction = (transform.position + attractionOffset - targetBody.transform.position).normalized;
+        targetBody.AddForce(direction * attractionForce, ForceMode.Force);
+    }
+
+    /// <summary>
+    /// Launch the object in the +Z direction (relative to our world space).
+    /// </summary>
+    private void LaunchObjectInZ(Rigidbody targetBody)
+    {
+        // Clear any leftover velocity so it doesn't affect the launch
+        targetBody.velocity = Vector3.zero;
+
+        // Add an impulse or velocity in world +Z direction
+        Vector3 launchDir = new Vector3(0, 0, 1); // or transform.forward if you want local ship's forward
+        targetBody.AddForce(launchDir * launchForce);
+    }
+
+
 }

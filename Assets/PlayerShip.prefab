@@ -258,6 +258,9 @@ MonoBehaviour:
   manager: {fileID: 0}
   speed: 20.9
   bulletSpeed: 1823
+  attractionRadius: 5
+  attractionForce: 10
+  attractionOffset: {x: 0, y: 0, z: 0.85}
   blinkDuration: 2
   blinkInterval: 0.07
 --- !u!1 &5143760983319147091

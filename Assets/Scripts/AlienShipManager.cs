@@ -138,9 +138,19 @@ public class AlienShipManager : MonoBehaviour
 
             if (timer >= shootFrequency)
             {
-                DebugGetBottomRow(Color.white);
-                int idx = Random.Range(0, bottomRow.Count); 
-                AlienShip ship = GetClosestShipToPlayer(player.gameObject.transform.position.x); 
+                int random = Random.Range(0, 3); 
+
+                AlienShip ship = null; 
+
+                if (random < 2)
+                {
+                    ship = GetClosestShipToPlayer(player.gameObject.transform.position.x);
+                }
+                else
+                {
+                    int idx = Random.Range(0, bottomRow.Count);
+                    ship = bottomRow[idx];
+                }
 
                 ship.GetComponent<Renderer>().material.SetColor("_Color", Color.red); 
                 ship.Shoot(shootSpeed); 
@@ -196,7 +206,6 @@ public class AlienShipManager : MonoBehaviour
 
     private void TriggerWin()
     {
-        Debug.Log("Player Wins");
         textYouWin.text = "You Win!";
         gameRunning = false; 
 

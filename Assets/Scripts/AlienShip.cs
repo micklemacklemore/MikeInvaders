@@ -33,6 +33,7 @@ public class AlienShip : MonoBehaviour
 
     public GameObject[] sprites; 
     private GameObject currentSprite = null; 
+    public GameObject CurrentSprite => currentSprite; 
     private bool spriteSwitch = false; 
     private bool animated = false;
     private float spriteTimer = 0.0f;  

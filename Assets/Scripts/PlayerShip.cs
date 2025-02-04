@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerShip : MonoBehaviour
 {
     [SerializeField] private GameObject bullet; 
+    [SerializeField] private GameObject bigBullet; 
     [SerializeField] private AlienShipManager manager; 
     [SerializeField] private float speed = 3.0f; 
     [SerializeField] private float bulletSpeed = 1200.0f; 
@@ -17,7 +18,7 @@ public class PlayerShip : MonoBehaviour
     private MeshRenderer meshRenderer; 
     private Color originalColor;
 
-    private AlienShip currentlyAttracted = null; 
+    private GameObject currentlyAttracted = null; 
 
     // Radius and force for attracting objects
     [SerializeField] private float attractionRadius = 5f;
@@ -62,6 +63,8 @@ public class PlayerShip : MonoBehaviour
         // Destroy(gameObject); 
     }
 
+    #region TODO: might use this later
+
     public void StartBlinking()
     {
         // StartCoroutine(BlinkCoroutine());
@@ -84,7 +87,7 @@ public class PlayerShip : MonoBehaviour
         meshRenderer.enabled = true; // Ensure object is visible after blinking
     }
 
-    
+    #endregion
 
     void Update()
     {
@@ -95,6 +98,24 @@ public class PlayerShip : MonoBehaviour
                 currentlyAttracted = FindNearestObject();
             }
             meshRenderer.material.SetColor("_Color", Color.blue);
+        }
+
+        if (currentlyAttracted != null && Vector3.Distance(transform.position + attractionOffset, currentlyAttracted.transform.position) < 1.5f)
+        {
+            if (!currentlyAttracted.CompareTag("BigBullet"))
+            {
+                GameObject replacement = Instantiate(bigBullet);
+
+                replacement.transform.position = currentlyAttracted.transform.position;  // Preserve world position
+                replacement.transform.rotation = currentlyAttracted.transform.rotation;  // Preserve world rotation
+                replacement.transform.localScale = currentlyAttracted.transform.lossyScale;  // Preserve world scale
+
+                currentlyAttracted.GetComponent<AlienShip>().CurrentSprite.transform.SetParent(replacement.transform); 
+
+                currentlyAttracted.SetActive(false);
+                currentlyAttracted = replacement;
+            }
+            
         }
 
         // 2. On key-up, launch it in the +Z direction
@@ -130,17 +151,17 @@ public class PlayerShip : MonoBehaviour
     // <summary>
     /// Finds the nearest rigidbody within `attractionRadius`.
     /// </summary>
-    private AlienShip FindNearestObject()
+    private GameObject FindNearestObject()
     {
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, attractionRadius);
 
         float minDist = float.MaxValue;
-        AlienShip nearestBody = null;
+        GameObject nearestBody = null;
 
         foreach (var collider in hitColliders)
         {
-            AlienShip rb = collider.gameObject.GetComponent<AlienShip>();
-            if (rb != null && rb.gameObject != gameObject)
+            GameObject rb = collider.gameObject;
+            if (rb.GetComponent<AlienShip>() != null && rb.gameObject != gameObject)
             {
                 float dist = Vector3.Distance(transform.position, rb.transform.position);
                 if (dist < minDist)

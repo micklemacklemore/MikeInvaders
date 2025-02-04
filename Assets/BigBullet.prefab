@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1409135658485722917}
   - component: {fileID: 2832509177239313221}
   - component: {fileID: 7445257475935025409}
+  - component: {fileID: 7923070116930829344}
   m_Layer: 0
   m_Name: BigBullet
   m_TagString: BigBullet
@@ -81,3 +82,16 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.94, y: 1.06, z: 1.23}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &7923070116930829344
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7674365672512911251}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5ac31557ee7d0344a79f94e6e0a3369, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  alienBit: {fileID: 2756567802705077832, guid: fe41960bb0ddde741b4b1bd75369678f, type: 3}

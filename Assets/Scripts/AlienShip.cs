@@ -41,6 +41,7 @@ public class AlienShip : MonoBehaviour
 
     public GameObject[] removeCollisionsOnDie; 
     private bool dead = false;
+    public bool isDead => dead; 
 
     public GameObject replacement;
 

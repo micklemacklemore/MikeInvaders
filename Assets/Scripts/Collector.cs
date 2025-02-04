@@ -23,6 +23,12 @@ public class Collector : MonoBehaviour
 
     void OnTriggerEnter(Collider collider)
     {
-        if (!collider.CompareTag("Alien Bit")) Debug.Log(collider.tag); 
+        if (collider.CompareTag("Alien")){
+            _manager.addPower(); 
+        }
+
+        if (collider.CompareTag("Bullet")){
+            _manager.addBullets(); 
+        }
     }
 }

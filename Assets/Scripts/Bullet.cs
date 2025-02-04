@@ -58,6 +58,7 @@ public class Bullet : MonoBehaviour
             GetComponent<Rigidbody>().useGravity = true; 
             GetComponent<Rigidbody>().mass = 0f; 
             GetComponent<Renderer>().material.SetColor("_Color", Color.grey); 
+            GetComponent<BoxCollider>().size += new Vector3(0.5f, 0.5f, 0.5f);
         }
         // Destroy(gameObject); 
     }

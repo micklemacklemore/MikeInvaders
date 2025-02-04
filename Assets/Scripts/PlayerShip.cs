@@ -26,6 +26,12 @@ public class PlayerShip : MonoBehaviour
     [SerializeField] private Vector3 attractionOffset = Vector3.zero; 
     [SerializeField] private float launchForce = 1f; 
 
+    [SerializeField] private int startingBullets = 10; 
+    [SerializeField] private float startingPower = 10f; 
+
+    public int bullets; 
+    public float power; 
+
     // Start is called before the first frame update
     void Start()
     {
@@ -36,6 +42,9 @@ public class PlayerShip : MonoBehaviour
         
         meshRenderer = GetComponent<MeshRenderer>();
         originalColor = meshRenderer.material.GetColor("_Color"); 
+
+        bullets = startingBullets; 
+        power = startingPower; 
     }
 
     // Update is called once per frame
@@ -102,7 +111,7 @@ public class PlayerShip : MonoBehaviour
 
         if (currentlyAttracted != null && Vector3.Distance(transform.position + attractionOffset, currentlyAttracted.transform.position) < 1.5f)
         {
-            if (!currentlyAttracted.CompareTag("BigBullet"))
+            if (!currentlyAttracted.CompareTag("BigBullet") && power > 0)
             {
                 GameObject replacement = Instantiate(bigBullet);
 
@@ -130,12 +139,13 @@ public class PlayerShip : MonoBehaviour
                     b.Launched = true; 
                     LaunchObjectInZ(currentlyAttracted.GetComponent<Rigidbody>());
                     currentlyAttracted = null; // We’re done with it
+                    power -= 10; 
                 }
             }
         }
 
         // Check if bullet has been destroyed before allowing another fire
-        if (Input.GetButtonDown("Fire1") && (activeBullet == null || !activeBullet.isAlive) )
+        if (Input.GetButtonDown("Fire1") && (activeBullet == null || !activeBullet.isAlive) && bullets > 0)
         {
             Vector3 spawnPos = gameObject.transform.position;
             var obj = Instantiate(bullet, spawnPos, Quaternion.identity);
@@ -145,6 +155,7 @@ public class PlayerShip : MonoBehaviour
 
             obj.GetComponent<Bullet>().Thrust = new Vector3(0, 0, bulletSpeed);
             Physics.IgnoreCollision(obj.GetComponent<Collider>(), GetComponent<Collider>());
+            bullets--; 
         }
 
         if (Input.GetButtonDown("Fire2"))

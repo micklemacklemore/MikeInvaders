@@ -18,6 +18,8 @@ public class AlienShipManager : MonoBehaviour
     [Header("UI Prefab")]
     public TMP_Text textScore; 
     public TMP_Text textLives; 
+    public TMP_Text textBullets; 
+    public TMP_Text textPower; 
     public TMP_Text textYouWin; 
 
     [Header("Grid Settings")]
@@ -36,6 +38,9 @@ public class AlienShipManager : MonoBehaviour
     public float shootFrequency = 5f; // The target time for the timer
     public float UFOFrequency = 10f; 
     public float shootSpeed = 1200f;
+
+    [SerializeField] private int bulletPickup = 1; 
+    [SerializeField] private float powerPickup = 2.5f; 
 
     [SerializeField] private Camera camera2D; 
     [SerializeField] private Camera camera3D; 
@@ -136,6 +141,9 @@ public class AlienShipManager : MonoBehaviour
         {
             Application.Quit(); 
         }
+
+        textBullets.text = "Bullets: " + player.bullets; 
+        textPower.text = "Power: " + player.power; 
 
         if (gameRunning)
         {
@@ -389,5 +397,15 @@ public class AlienShipManager : MonoBehaviour
         }
 
         shipsLeft = numberOfRows * numberOfColumns; 
+    }
+
+    public void addBullets()
+    {
+        player.bullets += bulletPickup; 
+    }
+
+    public void addPower()
+    {
+        player.power += powerPickup; 
     }
 }

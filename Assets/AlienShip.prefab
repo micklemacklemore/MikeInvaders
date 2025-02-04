@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 138081183662763369}
   - component: {fileID: 6612607955849926306}
   - component: {fileID: 7901273048760582181}
-  m_Layer: 6
+  m_Layer: 8
   m_Name: AlienShip
   m_TagString: Alien
   m_Icon: {fileID: 0}
@@ -105,7 +105,7 @@ Rigidbody:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 768
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 0

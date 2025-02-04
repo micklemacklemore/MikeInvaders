@@ -53,7 +53,7 @@ Rigidbody:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 576
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
@@ -95,3 +95,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   alienBit: {fileID: 2756567802705077832, guid: fe41960bb0ddde741b4b1bd75369678f, type: 3}
+  lifetime: 3

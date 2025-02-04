@@ -1,22 +1,42 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.Scripting;
+using UnityEngine.UIElements.Experimental;
 
 public class BigBullet : MonoBehaviour
 {
     [SerializeField] private GameObject alienBit; 
+    [SerializeField] private float lifetime = 5f; 
+    private float timer = 0f; 
+
+    private bool _launched = false; 
+    public bool Launched { 
+        get => _launched; 
+        set {
+            gameObject.GetComponent<Rigidbody>().mass = 10f;
+            _launched = value; 
+        }
+    }
 
     // Start is called before the first frame update
     void Start()
     {
-        
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (_launched)
+        {
+            timer += Time.deltaTime; 
+
+            if (timer >= lifetime)
+            {
+                Explode(); 
+            }
+        }
     }
 
     void Explode()
@@ -44,11 +64,8 @@ public class BigBullet : MonoBehaviour
     void OnCollisionEnter(Collision collision)
     {
         Collider col = collision.collider; 
-        if (!col.CompareTag("Player") && !col.CompareTag("Alien Bit") && !col.CompareTag("Bullet"))
+        if (!col.CompareTag("Alien") && !col.CompareTag("Player") && !col.CompareTag("Alien Bit") && !col.CompareTag("Bullet"))
         {
-            AlienShip ship = col.gameObject.GetComponent<AlienShip>(); 
-            if (ship is not null && ship.isDead) return; 
-
             Explode(); 
         }
     }

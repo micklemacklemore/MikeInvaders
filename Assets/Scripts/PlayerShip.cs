@@ -124,8 +124,13 @@ public class PlayerShip : MonoBehaviour
             meshRenderer.material.SetColor("_Color", originalColor); 
             if (currentlyAttracted != null)
             {
-                LaunchObjectInZ(currentlyAttracted.GetComponent<Rigidbody>());
-                currentlyAttracted = null; // We’re done with it
+                BigBullet b = currentlyAttracted.GetComponent<BigBullet>(); 
+                if (b is not null)
+                {
+                    b.Launched = true; 
+                    LaunchObjectInZ(currentlyAttracted.GetComponent<Rigidbody>());
+                    currentlyAttracted = null; // We’re done with it
+                }
             }
         }
 

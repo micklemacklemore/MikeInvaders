@@ -258,11 +258,11 @@ MonoBehaviour:
   bigBullet: {fileID: 7674365672512911251, guid: 345366993ab821e4db04c693d686cc91, type: 3}
   manager: {fileID: 0}
   speed: 20.9
-  bulletSpeed: 1823
+  bulletSpeed: 2000
   attractionRadius: 5
   attractionForce: 10
   attractionOffset: {x: 0, y: 0, z: 0.85}
-  launchForce: 1
+  launchForce: 20000
   blinkDuration: 2
   blinkInterval: 0.07
 --- !u!1 &5143760983319147091

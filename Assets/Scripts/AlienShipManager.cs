@@ -37,10 +37,11 @@ public class AlienShipManager : MonoBehaviour
     public float UFOFrequency = 10f; 
     public float shootSpeed = 1200f;
 
-    [SerializeField] Camera camera2D; 
-    [SerializeField] Camera camera3D; 
+    [SerializeField] private Camera camera2D; 
+    [SerializeField] private Camera camera3D; 
 
-    [SerializeField] GameObject[] walls; 
+    [SerializeField] private GameObject[] walls; 
+    [SerializeField] private Collector[] collectors; 
 
     private Camera activeCamera;
 
@@ -55,7 +56,7 @@ public class AlienShipManager : MonoBehaviour
     private float ufoTimer = 0f; 
 
     private int totalScore; 
-    private int lives = 300; 
+    private int lives = 3; 
 
     private int shipsLeft; 
 
@@ -87,6 +88,11 @@ public class AlienShipManager : MonoBehaviour
         activeCamera = camera2D;
         camera2D.gameObject.SetActive(true);
         camera3D.gameObject.SetActive(false);
+
+        foreach (Collector collector in collectors)
+        {
+            collector.Manager = this; 
+        }
 
         gameRunning = true; 
     }
@@ -271,9 +277,9 @@ public class AlienShipManager : MonoBehaviour
         lives--; 
         textLives.text = "Lives: " + lives; 
 
-        SpawnPlayer(); 
+        // SpawnPlayer(); 
 
-        player.StartBlinking(); 
+        // player.StartBlinking(); 
     }
 
     public void SpawnPlayer()

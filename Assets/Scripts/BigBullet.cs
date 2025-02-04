@@ -68,5 +68,10 @@ public class BigBullet : MonoBehaviour
         {
             Explode(); 
         }
+
+        if (col.CompareTag("Alien"))
+        {
+            col.gameObject.GetComponent<AlienShip>().Die(collision); 
+        }
     }
 }

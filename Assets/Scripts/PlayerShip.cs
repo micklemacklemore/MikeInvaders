@@ -59,7 +59,7 @@ public class PlayerShip : MonoBehaviour
 
     public void Die()
     {
-        // manager.NotifyPlayerDestroyed(); 
+        manager.NotifyPlayerDestroyed(); 
         // Destroy(gameObject); 
     }
 

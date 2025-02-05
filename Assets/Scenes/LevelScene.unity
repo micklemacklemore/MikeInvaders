@@ -3025,7 +3025,7 @@ PrefabInstance:
       objectReference: {fileID: 142220541}
     - target: {fileID: 111030026586583575, guid: 46449fd93653a264080725a0066b740f, type: 3}
       propertyPath: powerPickup
-      value: 0.88
+      value: 0.9
       objectReference: {fileID: 0}
     - target: {fileID: 111030026586583575, guid: 46449fd93653a264080725a0066b740f, type: 3}
       propertyPath: textBullets

@@ -261,7 +261,7 @@ MonoBehaviour:
   bulletSpeed: 2000
   attractionRadius: 5
   attractionForce: 10
-  attractionOffset: {x: 0, y: 0, z: 0.85}
+  attractionOffset: {x: 0, y: 0, z: 2}
   launchForce: 20000
   startingBullets: 10
   startingPower: 10

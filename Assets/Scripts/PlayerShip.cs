@@ -146,21 +146,27 @@ public class PlayerShip : MonoBehaviour
         // 2. On key-up, launch it in the +Z direction
         if (Input.GetKeyUp(KeyCode.DownArrow))
         {
-            meshRenderer.material.SetColor("_Color", originalColor); 
+            meshRenderer.material.SetColor("_Color", originalColor);
             if (currentlyAttracted != null)
             {
-                BigBullet b = currentlyAttracted.GetComponent<BigBullet>(); 
+                Rigidbody rb = currentlyAttracted.GetComponent<Rigidbody>();
+                if (rb != null)
+                {
+                    rb.isKinematic = false; // Re-enable physics
+                    rb.velocity = Vector3.zero;
+                }
+
+                BigBullet b = currentlyAttracted.GetComponent<BigBullet>();
                 if (b is not null)
                 {
-                    b.Launched = true; 
-                    LaunchObjectInZ(currentlyAttracted.GetComponent<Rigidbody>());
-                    currentlyAttracted = null; // We’re done with it
-                    power -= 10; 
+                    b.Launched = true;
+                    LaunchObjectInZ(rb);
+                    currentlyAttracted = null;
+                    power -= 10;
                 }
                 else
                 {
-                    // currentlyAttracted.GetComponent<Rigidbody>().mass = 1.0f; 
-                    currentlyAttracted = null; 
+                    currentlyAttracted = null;
                 }
             }
         }
@@ -217,9 +223,25 @@ public class PlayerShip : MonoBehaviour
     /// </summary>
     private void PullObjectTowardPlayer(Rigidbody targetBody)
     {
-        Vector3 direction = (transform.position + attractionOffset - targetBody.transform.position).normalized;
-        targetBody.AddForce(direction * attractionForce, ForceMode.Force);
+        Vector3 pull = (transform.position + attractionOffset - targetBody.transform.position);
+        float distance = pull.magnitude;
+
+        if (distance < 0.5f) // Lock the object when within 0.5 units
+        {
+            targetBody.velocity = Vector3.zero; // Stop physics movement
+            targetBody.isKinematic = true; // Disable physics to "lock" it
+            targetBody.transform.position = transform.position + attractionOffset; // Snap to player
+            return; // Stop applying force
+        }
+
+        Vector3 direction = pull.normalized;
+        float dampingFactor = Mathf.Clamp01(distance / 5.0f); // Dampen attraction force as it gets closer
+
+        targetBody.AddForce(direction * attractionForce * distance * dampingFactor * 0.6f, ForceMode.Force);
     }
+
+
+
 
     /// <summary>
     /// Launch the object in the +Z direction (relative to our world space).

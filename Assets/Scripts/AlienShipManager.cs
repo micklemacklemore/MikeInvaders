@@ -20,6 +20,7 @@ public class AlienShipManager : MonoBehaviour
     public TMP_Text textLives; 
     public TMP_Text textBullets; 
     public TMP_Text textPower; 
+    public TMP_Text textPowerUp; 
     public TMP_Text textYouWin; 
 
     [Header("Grid Settings")]
@@ -131,6 +132,8 @@ public class AlienShipManager : MonoBehaviour
         }
     }
 
+    private bool playOnce = true; 
+
     private void Update()
     { 
         if (Input.GetKeyDown(KeyCode.C)) // Press 'C' to switch
@@ -145,6 +148,21 @@ public class AlienShipManager : MonoBehaviour
 
         textBullets.text = "Bullets: " + player.bullets; 
         textPower.text = "Power: " + player.power; 
+
+        if (player.power >= 10f)
+        {
+            if (playOnce)
+            {
+                soundManager.PlaySoundEffect("Gravity Ready", 1f);
+                playOnce = false; 
+            }
+            textPowerUp.text = "POWER UP!!!"; 
+        }
+        else
+        {
+            textPowerUp.text = ""; 
+            playOnce = true; 
+        }
 
         if (gameRunning)
         {
@@ -257,7 +275,7 @@ public class AlienShipManager : MonoBehaviour
 
     public void NotifyShipDestroyed(int row, int column, int score, bool ufo)
     {
-        soundManager.PlaySoundEffect("Alien Kill", 0.8f);
+        soundManager.PlaySoundEffect("Alien Kill", 0.6f);
         if (!ufo)
         {
             gridShips[row, column] = null; 

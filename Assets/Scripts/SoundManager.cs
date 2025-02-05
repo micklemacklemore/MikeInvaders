@@ -1,108 +1,75 @@
-using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class SoundManager : MonoBehaviour
 {
     public static SoundManager Instance { get; private set; }
 
-    private AudioSource musicSource;  // For background music
-    private AudioSource sfxSource;    // For sound effects
+    [System.Serializable]
+    public class Sound
+    {
+        public string key;
+        public AudioClip clip;
+    }
 
-    private Dictionary<string, AudioSource> activeSounds = new Dictionary<string, AudioSource>();
+    [Header("Sound Effects")]
+    [SerializeField] private List<Sound> soundEffects = new List<Sound>();
+    private Dictionary<string, AudioClip> soundDictionary = new Dictionary<string, AudioClip>();
 
-    [SerializeField] private AudioClip defaultMusic; // Assign default music in Inspector
+    [Header("Background Music")]
+    [SerializeField] private AudioClip backgroundMusic;
+    [SerializeField] private bool loopMusic = true;
+
+    [SerializeField] private AudioSource sfxSource;
+    [SerializeField] private AudioSource musicSource;
+
+    [SerializeField] private float musicVolume = 1f; 
 
     void Awake()
     {
-        if (Instance == null)
+        // Populate dictionary
+        foreach (var sound in soundEffects)
         {
-            Instance = this;
-            DontDestroyOnLoad(gameObject); // Keep the manager across scenes
+            if (!soundDictionary.ContainsKey(sound.key))
+            {
+                soundDictionary.Add(sound.key, sound.clip);
+            }
+        }
+
+        // Play background music if assigned
+        if (backgroundMusic)
+        {
+            PlayMusic(backgroundMusic, loopMusic, musicVolume);
+        }
+    }
+
+    public void PlaySoundEffect(string key, float volume = 1f)
+    {
+        if (soundDictionary.TryGetValue(key, out AudioClip clip))
+        {
+            sfxSource.PlayOneShot(clip, volume);
         }
         else
         {
-            Destroy(gameObject);
-            return;
+            Debug.LogWarning($"Sound key '{key}' not found in SoundManager.");
         }
-
-        // Create audio sources
-        musicSource = gameObject.AddComponent<AudioSource>();
-        musicSource.loop = true; // Make sure background music loops
-
-        sfxSource = gameObject.AddComponent<AudioSource>();
     }
 
-    // 🔹 Play a music track (and stop any current music)
-    public void PlayMusic(AudioClip clip, float volume = 1f)
+    public void PlayMusic(AudioClip clip, bool loop = true, float volume = 1f)
     {
         if (musicSource.isPlaying)
+        {
             musicSource.Stop();
+        }
 
         musicSource.clip = clip;
-        musicSource.volume = volume;
+        musicSource.loop = loop;
+        musicSource.volume = volume; 
         musicSource.Play();
     }
 
-    // 🔹 Play a sound effect (SFX)
-    public void PlaySFX(AudioClip clip, string key = "", float volume = 1f, bool loop = false)
-    {
-        if (string.IsNullOrEmpty(key)) key = clip.name; // Use clip name if no key is provided
-
-        if (activeSounds.ContainsKey(key))
-        {
-            StopSFX(key); // Stop the sound if it's already playing
-        }
-
-        AudioSource newSource = gameObject.AddComponent<AudioSource>();
-        newSource.clip = clip;
-        newSource.volume = volume;
-        newSource.loop = loop;
-        newSource.Play();
-
-        activeSounds[key] = newSource;
-
-        if (!loop)
-        {
-            Destroy(newSource, clip.length); // Auto-destroy non-looping sounds
-            activeSounds.Remove(key); // Remove reference
-        }
-    }
-
-    // 🔹 Stop a specific sound effect
-    public void StopSFX(string key)
-    {
-        if (activeSounds.ContainsKey(key))
-        {
-            Destroy(activeSounds[key]);
-            activeSounds.Remove(key);
-        }
-    }
-
-    // 🔹 Stop all sound effects
-    public void StopAllSFX()
-    {
-        foreach (var source in activeSounds.Values)
-        {
-            Destroy(source);
-        }
-        activeSounds.Clear();
-    }
-
-    // 🔹 Stop music
     public void StopMusic()
     {
-        if (musicSource.isPlaying)
-        {
-            musicSource.Stop();
-        }
-    }
-
-    // Play default music on start (Optional)
-    void Start()
-    {
-        if (defaultMusic != null)
-        {
-            PlayMusic(defaultMusic);
-        }
+        musicSource.Stop();
     }
 }

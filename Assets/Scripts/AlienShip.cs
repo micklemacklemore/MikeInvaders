@@ -122,6 +122,12 @@ public class AlienShip : MonoBehaviour
                 manager.NotifyShipDestroyed(rowIndex, columnIndex, score, ufo);
             }
 
+            if (ufo)
+            {
+                Destroy(gameObject);
+                return;
+            }
+
             rb.useGravity = true;
             rb.mass = 0.1f;
             animated = false;

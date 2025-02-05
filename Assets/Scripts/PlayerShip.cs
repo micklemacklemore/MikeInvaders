@@ -126,6 +126,7 @@ public class PlayerShip : MonoBehaviour
                 currentlyAttracted = FindNearestObject();
                 if (currentlyAttracted is not null)
                 {
+                    manager.SoundManager.PlaySoundEffect("Gravity Hold", 0.7f); 
                     GameObject sprite = currentlyAttracted.GetComponent<AlienShip>().CurrentSprite; 
                     foreach (Renderer render in sprite.GetComponentsInChildren<Renderer>())
                     {
@@ -176,6 +177,7 @@ public class PlayerShip : MonoBehaviour
                 BigBullet b = currentlyAttracted.GetComponent<BigBullet>();
                 if (b is not null)
                 {
+                    manager.SoundManager.PlaySoundEffect("Gravity Shoot", 0.7f);
                     b.Launched = true;
                     LaunchObjectInZ(rb);
                     currentlyAttracted = null;
@@ -183,6 +185,7 @@ public class PlayerShip : MonoBehaviour
                 }
                 else
                 {
+                    manager.SoundManager.PlaySoundEffect("Gravity Drop", 0.7f);
                     GameObject sprite = currentlyAttracted.GetComponent<AlienShip>().CurrentSprite;
                     foreach (Renderer render in sprite.GetComponentsInChildren<Renderer>())
                     {

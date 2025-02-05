@@ -55,7 +55,8 @@ public class AlienShipManager : MonoBehaviour
 
     private PlayerShip player; 
 
-    private AudioSource audioSource; 
+    private SoundManager soundManager; 
+    public SoundManager SoundManager => soundManager; 
 
     private float timer = 0f; // The time elapsed
     private float ufoTimer = 0f; 
@@ -78,7 +79,7 @@ public class AlienShipManager : MonoBehaviour
     private void Start()
     {
         gridShips = new AlienShip[numberOfRows, numberOfColumns]; 
-        audioSource = GetComponent<AudioSource>(); 
+        soundManager = GetComponent<SoundManager>(); 
 
         GameManager.EnsureInstance(); 
         totalScore = GameManager.Instance.Score; 
@@ -256,7 +257,7 @@ public class AlienShipManager : MonoBehaviour
 
     public void NotifyShipDestroyed(int row, int column, int score, bool ufo)
     {
-        audioSource.Play(); 
+        soundManager.PlaySoundEffect("Alien Kill", 0.8f);
         if (!ufo)
         {
             gridShips[row, column] = null; 
@@ -401,11 +402,13 @@ public class AlienShipManager : MonoBehaviour
 
     public void addBullets()
     {
+        soundManager.PlaySoundEffect("Ammo Pickup", 0.7f); 
         player.bullets += bulletPickup; 
     }
 
     public void addPower()
     {
+        soundManager.PlaySoundEffect("Power Pickup", 0.7f);
         player.power += powerPickup; 
     }
 }

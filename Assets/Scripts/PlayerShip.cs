@@ -17,6 +17,9 @@ public class PlayerShip : MonoBehaviour
 
     private MeshRenderer meshRenderer; 
     private Color originalColor;
+    private Color originalEmissionColor;
+    [SerializeField] private float emissionIntensity = 2f; // Intensity multiplier when active
+
 
     private GameObject currentlyAttracted = null; 
 
@@ -47,17 +50,21 @@ public class PlayerShip : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        forceVector.x = speed;  
-        GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotation | 
-                                                RigidbodyConstraints.FreezePositionZ | 
+        forceVector.x = speed;
+        GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotation |
+                                                RigidbodyConstraints.FreezePositionZ |
                                                 RigidbodyConstraints.FreezePositionY;
-        
-        meshRenderer = GetComponent<MeshRenderer>();
-        originalColor = meshRenderer.material.GetColor("_Color"); 
 
-        bullets = startingBullets; 
-        power = startingPower; 
+        meshRenderer = GetComponent<MeshRenderer>();
+        originalColor = meshRenderer.material.GetColor("_Color");
+
+        // Store original emission color
+        originalEmissionColor = meshRenderer.material.GetColor("_EmissionColor");
+
+        bullets = startingBullets;
+        power = startingPower;
     }
+
 
     // Update is called once per frame
     void FixedUpdate()
@@ -117,12 +124,20 @@ public class PlayerShip : MonoBehaviour
             if (currentlyAttracted == null)
             {
                 currentlyAttracted = FindNearestObject();
-                if (currentlyAttracted != null)
+                if (currentlyAttracted is not null)
                 {
-                    // currentlyAttracted.GetComponent<Rigidbody>().mass = 0.1f; 
+                    GameObject sprite = currentlyAttracted.GetComponent<AlienShip>().CurrentSprite; 
+                    foreach (Renderer render in sprite.GetComponentsInChildren<Renderer>())
+                    {
+                        render.material.EnableKeyword("_EMISSION");
+                        render.material.SetColor("_EmissionColor", Color.white * emissionIntensity);
+                    }
                 }
             }
             meshRenderer.material.SetColor("_Color", Color.blue);
+
+            // Increase emission intensity
+            meshRenderer.material.SetColor("_EmissionColor", originalEmissionColor * emissionIntensity);
         }
 
         if (currentlyAttracted != null && Vector3.Distance(transform.position + attractionOffset, currentlyAttracted.transform.position) < 1.5f)
@@ -147,6 +162,8 @@ public class PlayerShip : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.DownArrow))
         {
             meshRenderer.material.SetColor("_Color", originalColor);
+            // Reset emission intensity
+            meshRenderer.material.SetColor("_EmissionColor", originalEmissionColor);
             if (currentlyAttracted != null)
             {
                 Rigidbody rb = currentlyAttracted.GetComponent<Rigidbody>();
@@ -166,6 +183,12 @@ public class PlayerShip : MonoBehaviour
                 }
                 else
                 {
+                    GameObject sprite = currentlyAttracted.GetComponent<AlienShip>().CurrentSprite;
+                    foreach (Renderer render in sprite.GetComponentsInChildren<Renderer>())
+                    {
+                        render.material.DisableKeyword("_EMISSION");
+                        // render.material.SetColor("_EmissionColor", Color.black * 0f);
+                    }
                     currentlyAttracted = null;
                 }
             }

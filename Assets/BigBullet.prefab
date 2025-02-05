@@ -95,4 +95,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   alienBit: {fileID: 2756567802705077832, guid: fe41960bb0ddde741b4b1bd75369678f, type: 3}
-  lifetime: 3
+  lifetime: 0.8

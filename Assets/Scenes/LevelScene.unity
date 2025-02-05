@@ -2050,8 +2050,8 @@ Transform:
   m_GameObject: {fileID: 983790298}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -28.54, y: 0.16010284, z: -0.9}
-  m_LocalScale: {x: 1, y: 4.9178, z: 10.613638}
+  m_LocalPosition: {x: -28.54, y: 0.16010284, z: 3.36}
+  m_LocalScale: {x: 1, y: 4.9178, z: 22.929703}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -2260,8 +2260,8 @@ Transform:
   m_GameObject: {fileID: 1297383792}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 28.74, y: 0.16010284, z: -0.9}
-  m_LocalScale: {x: 1, y: 4.9178, z: 10.613638}
+  m_LocalPosition: {x: 28.74, y: 0.16010284, z: 0.92}
+  m_LocalScale: {x: 1, y: 4.9178, z: 25.374025}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -2486,7 +2486,7 @@ GameObject:
   - component: {fileID: 1484804514}
   - component: {fileID: 1484804513}
   - component: {fileID: 1484804512}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3023,6 +3023,10 @@ PrefabInstance:
       propertyPath: ufoSpawner
       value: 
       objectReference: {fileID: 142220541}
+    - target: {fileID: 111030026586583575, guid: 46449fd93653a264080725a0066b740f, type: 3}
+      propertyPath: powerPickup
+      value: 0.88
+      objectReference: {fileID: 0}
     - target: {fileID: 111030026586583575, guid: 46449fd93653a264080725a0066b740f, type: 3}
       propertyPath: textBullets
       value: 

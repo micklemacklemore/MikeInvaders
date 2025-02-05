@@ -29,8 +29,20 @@ public class PlayerShip : MonoBehaviour
     [SerializeField] private int startingBullets = 10; 
     [SerializeField] private float startingPower = 10f; 
 
-    public int bullets; 
-    public float power; 
+    private int _bullets; 
+    private float _power; 
+
+    public int bullets { get => _bullets; set => _bullets = value; } 
+    public float power { get => _power; 
+    set {
+        if (value < 0) {
+            _power = 0; 
+        }
+        else
+        {
+            _power = value; 
+        }
+    } }
 
     // Start is called before the first frame update
     void Start()
@@ -105,13 +117,17 @@ public class PlayerShip : MonoBehaviour
             if (currentlyAttracted == null)
             {
                 currentlyAttracted = FindNearestObject();
+                if (currentlyAttracted != null)
+                {
+                    // currentlyAttracted.GetComponent<Rigidbody>().mass = 0.1f; 
+                }
             }
             meshRenderer.material.SetColor("_Color", Color.blue);
         }
 
         if (currentlyAttracted != null && Vector3.Distance(transform.position + attractionOffset, currentlyAttracted.transform.position) < 1.5f)
         {
-            if (!currentlyAttracted.CompareTag("BigBullet") && power > 0)
+            if (!currentlyAttracted.CompareTag("BigBullet") && power >= 10f)
             {
                 GameObject replacement = Instantiate(bigBullet);
 
@@ -140,6 +156,11 @@ public class PlayerShip : MonoBehaviour
                     LaunchObjectInZ(currentlyAttracted.GetComponent<Rigidbody>());
                     currentlyAttracted = null; // We’re done with it
                     power -= 10; 
+                }
+                else
+                {
+                    // currentlyAttracted.GetComponent<Rigidbody>().mass = 1.0f; 
+                    currentlyAttracted = null; 
                 }
             }
         }
